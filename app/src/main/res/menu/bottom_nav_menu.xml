@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/dashboardFragment"
+        android:title="@string/dashboard"
+        android:icon="@drawable/ic_baseline_emoji_emotions" />
+
+    <item android:id="@+id/todoFragment"
+        android:title="@string/todo"
+        android:icon="@drawable/ic_baseline_list_alt" />
+
+    <item android:id="@+id/rewardFragment"
+        android:title="@string/reward"
+        android:icon="@drawable/ic_baseline_emoji_events" />
+
+    <item android:id="@+id/settingFragment"
+        android:title="@string/reward"
+        android:icon="@drawable/ic_baseline_settings" />
+</menu>
