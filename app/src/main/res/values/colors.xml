@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="md_purple_50">#EDE7F6</color>
-    <color name="md_purple_100">#D1C4E9</color>
-    <color name="md_purple_200">#B39DDB</color>
-    <color name="md_purple_300">#9575CD</color>
-    <color name="md_purple_400">#7E57C2</color>
-    <color name="md_purple_500">#673AB7</color>
-    <color name="md_purple_600">#5E35B1</color>
-    <color name="md_purple_700">#512DA8</color>
-    <color name="md_purple_800">#4527A0</color>
-    <color name="md_purple_900">#311B92</color>
-    <color name="md_purple_A100">#B388FF</color>
-    <color name="md_purple_A200">#7C4DFF</color>
-    <color name="md_purple_A400">#651FFF</color>
-    <color name="md_purple_A700">#6200EA</color>
-    <color name="colorAccent">#64B5F6</color>
+    <color name="md_blue_50">#E3F2FD</color>
+    <color name="md_blue_100">#BBDEFB</color>
+    <color name="md_blue_200">#90CAF9</color>
+    <color name="md_blue_300">#64B5F6</color>
+    <color name="md_blue_400">#42A5F5</color>
+    <color name="md_blue_500">#2196F3</color>
+    <color name="md_blue_700">#1976D2</color>
+    <color name="md_blue_800">#1565C0</color>
+    <color name="md_blue_900">#0D47A1</color>
+    <color name="md_blue_A100">#82B1FF</color>
+    <color name="md_blue_A200">#448AFF</color>
+    <color name="md_blue_A400">#2979FF</color>
+    <color name="md_blue_A700">#2962FF</color>
+    <color name="colorAccent">#FFE600</color>
     <color name="errorColor">#D50000</color>
+    <color name="colorWhite">#FFFFFF</color>
 </resources>

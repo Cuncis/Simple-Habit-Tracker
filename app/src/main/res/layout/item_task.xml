@@ -1,73 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="4dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <data>
+        <variable
+            name="task"
+            type="com.cuncisboss.simplehabittracker.model.Task" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp">
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_weight="0.3"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_baseline_adjust"
-            android:text="@{expense.datetime}"
-            tools:text="20 August 2020"
-            android:textSize="16sp"
-            android:maxLines="2"
-            android:ellipsize="end"
-            android:layout_marginEnd="12dp"/>
+        android:layout_margin="4dp">
 
         <LinearLayout
-            android:layout_weight="1.6"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{expense.note}"
-                tools:text="Beli Lauk"
-                android:textColor="@color/colorAccent"
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_weight="0.3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_baseline_adjust"
+                tools:text="20 August 2020"
                 android:textSize="16sp"
-                android:maxLines="1"
+                android:maxLines="2"
                 android:ellipsize="end"
-                android:textStyle="bold"/>
+                android:layout_marginEnd="12dp" />
+
+            <LinearLayout
+                android:layout_weight="1.6"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{task.name}"
+                    tools:text="Beli Lauk"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16sp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{task.date}"
+                    tools:text="Today"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="14sp"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
+            </LinearLayout>
 
             <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Today"
-                android:textColor="@color/colorAccent"
-                android:textSize="14sp"
-                android:maxLines="1"
-                android:ellipsize="end" />
+                android:layout_weight="0.2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:textSize="16sp"
+                tools:text="∞"
+                android:gravity="center" />
+
+            <ImageButton
+                android:layout_weight="0.4"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_baseline_check"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:padding="0dp"
+                android:contentDescription="@string/CheckList" />
         </LinearLayout>
 
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_weight="0.2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:textSize="16sp"
-            tools:text="∞"
-            android:gravity="center"/>
-
-        <ImageButton
-            android:layout_weight="0.4"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:src="@drawable/ic_baseline_check"
-            android:minHeight="0dp"
-            android:minWidth="0dp"
-            android:padding="0dp"
-            android:contentDescription="@string/CheckList"/>
-    </LinearLayout>
-
-</com.google.android.material.card.MaterialCardView>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

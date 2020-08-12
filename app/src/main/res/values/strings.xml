@@ -5,5 +5,16 @@
     <string name="dashboard">Dashboard</string>
     <string name="todo">Todo</string>
     <string name="reward">Reward</string>
+    <string name="setting">Setting</string>
     <string name="CheckList">Checklist</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="task">Task</string>
+    <string name="date">Date</string>
+    <string name="type">Type</string>
+    <string-array name="type_options">
+        <item>Repeat</item>
+        <item>Once</item>
+        <item>Certain</item>
+    </string-array>
 </resources>

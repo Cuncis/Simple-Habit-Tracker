@@ -83,9 +83,12 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
 
-    //koin
+    // koin
     implementation "org.koin:koin-android:2.1.6"
     implementation "org.koin:koin-androidx-scope:2.1.6"
     implementation "org.koin:koin-androidx-viewmodel:2.1.6"
     testImplementation "org.koin:koin-test:2.1.6"
+
+    // date picker
+    implementation 'com.github.niwattep:material-slide-date-picker:v2.0.0'
 }
