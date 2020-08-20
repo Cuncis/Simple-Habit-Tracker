@@ -21,10 +21,8 @@ class ContainerTabsTodoFragment : Fragment(R.layout.fragment_container_tabs_todo
         tab_todo.addTab(tab_todo.newTab().setText("Today"))
         tab_todo.addTab(tab_todo.newTab().setText("Tomorrow"))
 
-        pager_todo.apply {
-            setCurrentItem(1, false)
-            tab_todo.getTabAt(1)?.select()
-        }
+        pager_todo.setCurrentItem(1, false)
+        tab_todo.getTabAt(1)?.select()
 
         tab_todo.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
