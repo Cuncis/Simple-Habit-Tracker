@@ -11,11 +11,6 @@
         android:label="fragment_dashboard"
         tools:layout="@layout/fragment_dashboard" />
     <fragment
-        android:id="@+id/todoFragment"
-        android:name="com.cuncisboss.simplehabittracker.ui.todo.TodoFragment"
-        android:label="fragment_todo"
-        tools:layout="@layout/fragment_todo" />
-    <fragment
         android:id="@+id/rewardFragment"
         android:name="com.cuncisboss.simplehabittracker.ui.RewardFragment"
         android:label="fragment_reward"
@@ -25,4 +20,9 @@
         android:name="com.cuncisboss.simplehabittracker.ui.SettingFragment"
         android:label="fragment_setting"
         tools:layout="@layout/fragment_setting" />
+    <fragment
+        android:id="@+id/containerTabsTodoFragment"
+        android:name="com.cuncisboss.simplehabittracker.ui.todo.ContainerTabsTodoFragment"
+        android:label="fragment_container_tabs_todo"
+        tools:layout="@layout/fragment_container_tabs_todo" />
 </navigation>

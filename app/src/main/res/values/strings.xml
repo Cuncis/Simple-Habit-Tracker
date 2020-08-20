@@ -17,6 +17,6 @@
     <string-array name="type_options">
         <item>Repeat</item>
         <item>Once</item>
-<!--        <item>Certain</item>-->
+        <!--        <item>Certain</item>-->
     </string-array>
 </resources>

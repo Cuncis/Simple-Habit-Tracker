@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".ui.todo.ContainerTabsTodoFragment">
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_todo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabTextColor="@color/material_on_background_emphasis_high_type"
+        app:tabIndicatorColor="@color/md_blue_900"
+        app:tabBackground="@drawable/tab_color_selector"
+        android:minWidth="8dp"/>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pager_todo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

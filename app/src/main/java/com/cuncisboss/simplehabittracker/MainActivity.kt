@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
                     R.id.dashboardFragment -> {
                         tv_toolbar_title.text = getString(R.string.dashboard)
                     }
-                    R.id.todoFragment -> {
+                    R.id.containerTabsTodoFragment -> {
                         tv_toolbar_title.text = getString(R.string.todo)
                     }
                     R.id.rewardFragment -> {

@@ -1,4 +1,4 @@
-package com.cuncisboss.simplehabittracker.ui.todo
+package com.cuncisboss.simplehabittracker.ui.todo.today
 
 import android.os.Bundle
 import android.util.Log
@@ -9,28 +9,29 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.cuncisboss.simplehabittracker.R
 import com.cuncisboss.simplehabittracker.databinding.DialogAddTaskBinding
-import com.cuncisboss.simplehabittracker.databinding.FragmentTodoBinding
+import com.cuncisboss.simplehabittracker.databinding.FragmentTodayBinding
 import com.cuncisboss.simplehabittracker.model.Task
+import com.cuncisboss.simplehabittracker.ui.todo.TodoAdapter
+import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
 import com.cuncisboss.simplehabittracker.util.Constants.TAG
 import com.cuncisboss.simplehabittracker.util.Helper
 import com.cuncisboss.simplehabittracker.util.Helper.reverseThis
 import com.cuncisboss.simplehabittracker.util.Helper.showSnackbarMessage
-import kotlinx.android.synthetic.main.fragment_todo.*
+import kotlinx.android.synthetic.main.fragment_today.*
 import org.koin.android.ext.android.inject
 
 
-class TodoFragment : Fragment() {
+class TodayFragment : Fragment() {
 
     private val viewModel by inject<TodoViewModel>()
 
-//    private lateinit var dialogBinding: DialogAddTaskBinding
-    private lateinit var binding: FragmentTodoBinding
+    private lateinit var binding: FragmentTodayBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_todo, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_today, container, false)
         setHasOptionsMenu(true)
         return binding.root
     }
