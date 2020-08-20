@@ -15,8 +15,11 @@ import com.cuncisboss.simplehabittracker.ui.todo.TodoAdapter
 import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TOMORROW
 import com.cuncisboss.simplehabittracker.util.Helper
+import com.cuncisboss.simplehabittracker.util.Helper.disableBackgroundTint
 import com.cuncisboss.simplehabittracker.util.Helper.reverseThis
 import com.cuncisboss.simplehabittracker.util.Helper.showSnackbarMessage
+import com.cuncisboss.simplehabittracker.util.VisibleHelper.hideView
+import kotlinx.android.synthetic.main.dialog_alert_actions.view.*
 import org.koin.android.ext.android.inject
 
 class TomorrowFragment : Fragment() {
@@ -48,9 +51,9 @@ class TomorrowFragment : Fragment() {
 
         adapter.setChecklistListener { v, task ->
             if (v.id == R.id.btn_checklist) {
-                Toast.makeText(requireContext(), "Check: ${task?.name}", Toast.LENGTH_SHORT).show()
+                dialogAlert(true)
             } else {
-                Toast.makeText(requireContext(), "Dialog Called!", Toast.LENGTH_SHORT).show()
+                dialogAlert(false)
             }
         }
     }
@@ -81,6 +84,30 @@ class TomorrowFragment : Fragment() {
 
         dialogBinding.btnCancel.setOnClickListener {
             dialog.cancel()
+        }
+
+        dialog.show()
+    }
+
+    private fun dialogAlert(isChecked: Boolean) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setCancelable(true)
+        val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_alert_actions, null as ViewGroup?)
+        builder.setView(view)
+
+        val dialog = builder.create()
+
+        if (isChecked) {
+            view.btn_delete_task.hideView()
+            view.btn_skip_task.hideView()
+            view.btn_done_task.disableBackgroundTint()
+        } else {
+            view.btn_skip_task.hideView()
+            view.btn_done_task.hideView()
+        }
+
+        view.btn_delete_task.setOnClickListener {
+            Toast.makeText(requireContext(), "Delete task tomorrow", Toast.LENGTH_SHORT).show()
         }
 
         dialog.show()

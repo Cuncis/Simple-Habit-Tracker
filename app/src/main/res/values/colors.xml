@@ -19,4 +19,5 @@
     <color name="colorAccent">#FFE600</color>
     <color name="errorColor">#D50000</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorScrim">#52000000</color>
 </resources>

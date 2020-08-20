@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.cuncisboss.simplehabittracker.R
@@ -17,6 +18,8 @@ import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
 import com.cuncisboss.simplehabittracker.util.Constants
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_YESTERDAY
 import com.cuncisboss.simplehabittracker.util.Helper.reverseThis
+import com.cuncisboss.simplehabittracker.util.VisibleHelper.hideView
+import kotlinx.android.synthetic.main.dialog_alert_actions.view.*
 import org.koin.android.ext.android.inject
 
 class YesterdayFragment : Fragment() {
@@ -47,11 +50,30 @@ class YesterdayFragment : Fragment() {
 
         adapter.setChecklistListener { v, task ->
             if (v.id == R.id.btn_checklist) {
-                Toast.makeText(requireContext(), "Check: ${task?.name}", Toast.LENGTH_SHORT).show()
+                dialogAlert(true)
             } else {
-                Toast.makeText(requireContext(), "Dialog Called!", Toast.LENGTH_SHORT).show()
+                dialogAlert(false)
             }
         }
+    }
+
+    private fun dialogAlert(isChecked: Boolean) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setCancelable(true)
+        val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_alert_actions, null as ViewGroup?)
+        builder.setView(view)
+
+        val dialog = builder.create()
+
+        if (isChecked) {
+            view.btn_delete_task.hideView()
+            view.btn_skip_task.hideView()
+        } else {
+            view.btn_done_task.hideView()
+            view.btn_skip_task.hideView()
+        }
+
+        dialog.show()
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
