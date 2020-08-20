@@ -69,6 +69,7 @@
                 android:gravity="center" />
 
             <ImageButton
+                android:id="@+id/btn_checklist"
                 android:layout_weight="0.4"
                 android:layout_width="0dp"
                 android:layout_height="50dp"

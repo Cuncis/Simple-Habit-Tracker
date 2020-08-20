@@ -19,8 +19,8 @@ class TodoViewModel(private val taskDao: TaskDao) : ViewModel() {
         taskDao.removeTask(task)
     }
 
-    fun getTasks(): LiveData<List<Task>> {
-        return taskDao.getTasks()
+    fun getTasks(type: Int): LiveData<List<Task>> {
+        return taskDao.getTasks(type)
     }
 
     fun removeAllTask() = viewModelScope.launch {

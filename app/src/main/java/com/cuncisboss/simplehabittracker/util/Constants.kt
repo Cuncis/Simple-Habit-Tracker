@@ -7,6 +7,10 @@ object Constants {
 
     const val DATABASE_NAME = "habit_tracker_db"
 
+    const val TASK_TYPE_YESTERDAY = 1
+    const val TASK_TYPE_TODAY = 2
+    const val TASK_TYPE_TOMORROW = 3
+
     const val NOTIFICATION_CHANNEL_ID = "task_channel"
     const val NOTIFICATION_CHANNEL_NAME = "Task"
     const val NOTIFICATION_ID = 1   // notificationId cannot put 0 value

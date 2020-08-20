@@ -17,8 +17,8 @@ interface TaskDao {
     @Update
     suspend fun updateTask(task: Task)
 
-    @Query("SELECT * FROM task_table")
-    fun getTasks(): LiveData<List<Task>>
+    @Query("SELECT * FROM task_table WHERE type =:type")
+    fun getTasks(type: Int): LiveData<List<Task>>
 
     @Query("DELETE FROM task_table")
     suspend fun removeAllTask()

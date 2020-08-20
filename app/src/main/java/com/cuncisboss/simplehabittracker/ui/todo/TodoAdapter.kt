@@ -14,8 +14,9 @@ import com.cuncisboss.simplehabittracker.model.Task
 class TodoAdapter : RecyclerView.Adapter<TodoAdapter.ViewHolder>(){
 
     private var taskList = arrayListOf<Task>()
+    private var listener: ((view: View, Task?) -> Unit)? = null
 
-    inner class ViewHolder(val binding: ItemTaskBinding): RecyclerView.ViewHolder(binding.root)
+    class ViewHolder(val binding: ItemTaskBinding): RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -33,8 +34,15 @@ class TodoAdapter : RecyclerView.Adapter<TodoAdapter.ViewHolder>(){
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.task = taskList[position]
         holder.itemView.setOnClickListener {
-            Toast.makeText(holder.itemView.context, "Dor ${taskList[position]}", Toast.LENGTH_SHORT).show()
+            listener?.invoke(it, taskList[position])
         }
+        holder.binding.btnChecklist.setOnClickListener {
+            listener?.invoke(it, taskList[position])
+        }
+    }
+
+    fun setChecklistListener(listener: (view: View, Task?) -> Unit) {
+        this.listener = listener
     }
 
     fun submitList(newTaskList: List<Task>) {

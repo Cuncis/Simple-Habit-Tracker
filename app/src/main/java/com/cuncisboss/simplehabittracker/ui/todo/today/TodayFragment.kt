@@ -3,6 +3,7 @@ package com.cuncisboss.simplehabittracker.ui.todo.today
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -14,10 +15,10 @@ import com.cuncisboss.simplehabittracker.model.Task
 import com.cuncisboss.simplehabittracker.ui.todo.TodoAdapter
 import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
 import com.cuncisboss.simplehabittracker.util.Constants.TAG
+import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TODAY
 import com.cuncisboss.simplehabittracker.util.Helper
 import com.cuncisboss.simplehabittracker.util.Helper.reverseThis
 import com.cuncisboss.simplehabittracker.util.Helper.showSnackbarMessage
-import kotlinx.android.synthetic.main.fragment_today.*
 import org.koin.android.ext.android.inject
 
 
@@ -44,13 +45,21 @@ class TodayFragment : Fragment() {
         )
 
         val adapter = TodoAdapter()
-        rv_task.adapter = adapter
+        binding.rvToday.adapter = adapter
 
-        viewModel.getTasks().observe(viewLifecycleOwner, Observer {
+        viewModel.getTasks(TASK_TYPE_TODAY).observe(viewLifecycleOwner, Observer {
             Log.d(TAG, "onViewCreated: $it")
             it.reverseThis()
             adapter.submitList(it)
         })
+
+        adapter.setChecklistListener { v, task ->
+            if (v.id == R.id.btn_checklist) {
+                Toast.makeText(requireContext(), "Check: ${task?.name}", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), "Dialog Called!", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun dialogInsert() {
@@ -69,7 +78,7 @@ class TodayFragment : Fragment() {
                     0,
                     dialogBinding.etTask.text.toString(),
                     Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime()),
-                    1,      // 1. repeating, 2. once, 3. certain
+                    TASK_TYPE_TODAY,      // 1. repeating, 2. once, 3. certain -> 1. Yesterday 2. Today 3. Tomorrow
                     dialogBinding.etReward.text.toString().toInt()
                 )
             )
@@ -82,6 +91,11 @@ class TodayFragment : Fragment() {
         }
 
         dialog.show()
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        menu.getItem(0).isVisible = true
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
