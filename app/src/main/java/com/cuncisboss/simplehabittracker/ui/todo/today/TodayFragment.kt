@@ -1,5 +1,6 @@
 package com.cuncisboss.simplehabittracker.ui.todo.today
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -13,8 +14,11 @@ import com.cuncisboss.simplehabittracker.databinding.FragmentTodayBinding
 import com.cuncisboss.simplehabittracker.model.Task
 import com.cuncisboss.simplehabittracker.ui.todo.TodoAdapter
 import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
+import com.cuncisboss.simplehabittracker.util.Constants
 import com.cuncisboss.simplehabittracker.util.Constants.TAG
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TODAY
+import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TOMORROW
+import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_YESTERDAY
 import com.cuncisboss.simplehabittracker.util.Helper
 import com.cuncisboss.simplehabittracker.util.Helper.reverseThis
 import com.cuncisboss.simplehabittracker.util.Helper.showSnackbarMessage
@@ -27,6 +31,7 @@ import org.koin.android.ext.android.inject
 class TodayFragment : Fragment() {
 
     private val viewModel by inject<TodoViewModel>()
+    private val pref by inject<SharedPreferences>()
 
     private lateinit var binding: FragmentTodayBinding
 
@@ -41,16 +46,13 @@ class TodayFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(
-            TAG,
-            "dialogInsert: ${Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime())}"
-        )
+        Log.d(TAG, "dialogInsert: ${Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(0))}")
+        Log.d(TAG, "dialogInsert: ${Helper.getCurrentDatetime(0)}")
 
         val adapter = TodoAdapter()
         binding.rvToday.adapter = adapter
 
         viewModel.getTasks(TASK_TYPE_TODAY).observe(viewLifecycleOwner, Observer {
-            Log.d(TAG, "onViewCreated: $it")
             it.reverseThis()
             adapter.submitList(it)
         })
@@ -87,9 +89,9 @@ class TodayFragment : Fragment() {
                         Task(
                             0,
                             dialogBinding.etTask.text.toString(),
-                            Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime()),
+                            Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(0)),
                             TASK_TYPE_TODAY,      // 1. repeating, 2. once, 3. certain -> 1. Yesterday 2. Today 3. Tomorrow
-                            dialogBinding.etReward.text.toString().toInt()
+                            dialogBinding.etReward.text.toString().toLong()
                         )
                     )
                     requireView().showSnackbarMessage("Task added")
@@ -127,6 +129,33 @@ class TodayFragment : Fragment() {
                 viewModel.removeTask(task)
                 dialog.dismiss()
                 requireView().showSnackbarMessage("Task deleted")
+            }
+        }
+
+        view.btn_skip_task.setOnClickListener {
+            if (task != null) {
+                task.type = TASK_TYPE_TOMORROW
+                task.date = Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(1))
+                viewModel.updateTask(task)
+                dialog.dismiss()
+                requireView().showSnackbarMessage("Task skipped")
+            }
+        }
+
+        view.btn_done_task.setOnClickListener {
+            if (task != null) {
+                task.type = TASK_TYPE_TOMORROW
+                task.date = Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(1))
+                viewModel.updateTask(task)
+                if (pref.getLong(Constants.KEY_TOTAL, 0L) == 0L) {
+                    pref.edit().putLong(Constants.KEY_TOTAL, task.value).apply()
+                } else {
+                    val total = task.value + pref.getLong(Constants.KEY_TOTAL, 0L)
+                    pref.edit().putLong(Constants.KEY_TOTAL, total).apply()
+                }
+                Log.d(TAG, "dialogAlert: ${pref.getLong(Constants.KEY_TOTAL, 0L)}")
+                dialog.dismiss()
+                requireView().showSnackbarMessage("Congrats your task is done")
             }
         }
 

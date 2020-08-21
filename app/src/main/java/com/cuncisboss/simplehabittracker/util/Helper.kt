@@ -21,27 +21,21 @@ object Helper {
         Snackbar.make(this, message, Snackbar.LENGTH_LONG).show()
     }
 
-    fun getCurrentDatetime(): String {
-        return SimpleDateFormat("dd/M/yyyy hh:mm", Locale.getDefault()).format(Date())
+    fun getCurrentDatetime(incOrDec: Int): String {
+        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm", Locale.getDefault())
+        val calendar = Calendar.getInstance()
+        calendar.time = Date()
+        calendar.add(Calendar.DATE, incOrDec)
+        return sdf.format(calendar.time)
     }
 
     fun formatToYesterdayOrTodayOrTomorrow(date: String): String {
-        /*
-        Date dateTime = new SimpleDateFormat("EEE hh:mma MMM d, yyyy").parse(date);
-    Calendar calendar = Calendar.getInstance();
-    calendar.setTime(dateTime);
-    Calendar today = Calendar.getInstance();
-    Calendar yesterday = Calendar.getInstance();
-    yesterday.add(Calendar.DATE, -1);
-    DateFormat timeFormatter = new SimpleDateFormat("hh:mma");
-         */
         val datetime = SimpleDateFormat("dd/M/yyyy hh:mm", Locale.getDefault()).parse(date)
         val calendar = Calendar.getInstance()
         calendar.time = datetime as Date
         val today = Calendar.getInstance()
         val yesterday = Calendar.getInstance()
         yesterday.add(Calendar.DATE, -1)
-        val timeFormatter = SimpleDateFormat("hh:mma", Locale.getDefault())
 
         return if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
             && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {

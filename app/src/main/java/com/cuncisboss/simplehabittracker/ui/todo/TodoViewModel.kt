@@ -23,6 +23,10 @@ class TodoViewModel(private val taskDao: TaskDao) : ViewModel() {
         return taskDao.getTasks(type)
     }
 
+    fun updateTask(task: Task) = viewModelScope.launch {
+        taskDao.updateTask(task)
+    }
+
     fun removeAllTask() = viewModelScope.launch {
         taskDao.removeAllTask()
     }

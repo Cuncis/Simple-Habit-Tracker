@@ -43,6 +43,8 @@ class TomorrowFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "dialogInsert: ${Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(1))}")
+        Log.d(TAG, "dialogInsert: ${Helper.getCurrentDatetime(1)}")
 
         val adapter = TodoAdapter()
         binding.rvTomorrow.adapter = adapter
@@ -84,9 +86,9 @@ class TomorrowFragment : Fragment() {
                         Task(
                             0,
                             dialogBinding.etTask.text.toString(),
-                            Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime()),
+                            Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(1)),
                             TASK_TYPE_TOMORROW,      // 1. repeating, 2. once, 3. certain -> 1. Yesterday 2. Today 3. Tomorrow
-                            dialogBinding.etReward.text.toString().toInt()
+                            dialogBinding.etReward.text.toString().toLong()
                         )
                     )
                     requireView().showSnackbarMessage("Task added")
