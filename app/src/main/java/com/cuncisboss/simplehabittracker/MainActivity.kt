@@ -1,6 +1,7 @@
 package com.cuncisboss.simplehabittracker
 
 import android.os.Bundle
+import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -20,15 +21,18 @@ class MainActivity : AppCompatActivity() {
                 when (destination.id) {
                     R.id.dashboardFragment -> {
                         tv_toolbar_title.text = getString(R.string.dashboard)
+                        toolbar.menu.clear()
                     }
                     R.id.containerTabsTodoFragment -> {
                         tv_toolbar_title.text = getString(R.string.todo)
                     }
                     R.id.rewardFragment -> {
                         tv_toolbar_title.text = getString(R.string.reward)
+                        toolbar.menu.clear()
                     }
                     R.id.settingFragment -> {
                         tv_toolbar_title.text = getString(R.string.setting)
+                        toolbar.menu.clear()
                     }
                 }
             }

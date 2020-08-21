@@ -2,23 +2,24 @@ package com.cuncisboss.simplehabittracker.ui.todo.yesterday
 
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.cuncisboss.simplehabittracker.R
 import com.cuncisboss.simplehabittracker.databinding.FragmentYesterdayBinding
+import com.cuncisboss.simplehabittracker.model.Task
 import com.cuncisboss.simplehabittracker.ui.todo.TodoAdapter
 import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
 import com.cuncisboss.simplehabittracker.util.Constants
+import com.cuncisboss.simplehabittracker.util.Constants.TAG
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_YESTERDAY
 import com.cuncisboss.simplehabittracker.util.Helper.reverseThis
 import com.cuncisboss.simplehabittracker.util.VisibleHelper.hideView
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_alert_actions.view.*
 import org.koin.android.ext.android.inject
 
@@ -34,6 +35,7 @@ class YesterdayFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_yesterday, container, false)
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -50,14 +52,14 @@ class YesterdayFragment : Fragment() {
 
         adapter.setChecklistListener { v, task ->
             if (v.id == R.id.btn_checklist) {
-                dialogAlert(true)
+                dialogAlert(task, true)
             } else {
-                dialogAlert(false)
+                dialogAlert(task, false)
             }
         }
     }
 
-    private fun dialogAlert(isChecked: Boolean) {
+    private fun dialogAlert(task: Task?, isChecked: Boolean) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(true)
         val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_alert_actions, null as ViewGroup?)
@@ -65,12 +67,13 @@ class YesterdayFragment : Fragment() {
 
         val dialog = builder.create()
 
+        view.tvTitleDialog.text = task?.name
+
         if (isChecked) {
             view.btn_delete_task.hideView()
             view.btn_skip_task.hideView()
         } else {
             view.btn_done_task.hideView()
-            view.btn_skip_task.hideView()
         }
 
         dialog.show()
@@ -78,6 +81,8 @@ class YesterdayFragment : Fragment() {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        menu.getItem(0).isVisible = false
+        if (menu.findItem(R.id.action_add) != null) {
+            menu.getItem(0).isVisible = false
+        }
     }
 }

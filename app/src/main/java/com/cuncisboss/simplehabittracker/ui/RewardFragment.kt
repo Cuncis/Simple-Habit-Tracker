@@ -19,10 +19,5 @@ class RewardFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_reward, container, false)
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
-        menu.getItem(0).isVisible = false
-    }
-
 
 }

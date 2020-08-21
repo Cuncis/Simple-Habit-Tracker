@@ -3,7 +3,6 @@ package com.cuncisboss.simplehabittracker.ui.todo.today
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -20,6 +19,7 @@ import com.cuncisboss.simplehabittracker.util.Helper
 import com.cuncisboss.simplehabittracker.util.Helper.reverseThis
 import com.cuncisboss.simplehabittracker.util.Helper.showSnackbarMessage
 import com.cuncisboss.simplehabittracker.util.VisibleHelper.hideView
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_alert_actions.view.*
 import org.koin.android.ext.android.inject
 
@@ -57,9 +57,9 @@ class TodayFragment : Fragment() {
 
         adapter.setChecklistListener { v, task ->
             if (v.id == R.id.btn_checklist) {
-                dialogAlert(true)
+                dialogAlert(task, true)
             } else {
-                dialogAlert(false)
+                dialogAlert(task,false)
             }
         }
     }
@@ -75,17 +75,27 @@ class TodayFragment : Fragment() {
         val dialog = builder.create()
 
         dialogBinding.btnSave.setOnClickListener {
-            viewModel.addTask(
-                Task(
-                    0,
-                    dialogBinding.etTask.text.toString(),
-                    Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime()),
-                    TASK_TYPE_TODAY,      // 1. repeating, 2. once, 3. certain -> 1. Yesterday 2. Today 3. Tomorrow
-                    dialogBinding.etReward.text.toString().toInt()
-                )
-            )
-            requireView().showSnackbarMessage("Task added")
-            dialog.dismiss()
+            when {
+                dialogBinding.etTask.text.isEmpty() -> {
+                    dialogBinding.etTask.error = "Task should not be empty"
+                }
+                dialogBinding.etReward.text.isEmpty() -> {
+                    dialogBinding.etReward.error = "Reward should not be empty"
+                }
+                else -> {
+                    viewModel.addTask(
+                        Task(
+                            0,
+                            dialogBinding.etTask.text.toString(),
+                            Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime()),
+                            TASK_TYPE_TODAY,      // 1. repeating, 2. once, 3. certain -> 1. Yesterday 2. Today 3. Tomorrow
+                            dialogBinding.etReward.text.toString().toInt()
+                        )
+                    )
+                    requireView().showSnackbarMessage("Task added")
+                    dialog.dismiss()
+                }
+            }
         }
 
         dialogBinding.btnCancel.setOnClickListener {
@@ -95,13 +105,15 @@ class TodayFragment : Fragment() {
         dialog.show()
     }
 
-    private fun dialogAlert(isChecked: Boolean) {
+    private fun dialogAlert(task: Task?, isChecked: Boolean) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(true)
         val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_alert_actions, null as ViewGroup?)
         builder.setView(view)
 
         val dialog = builder.create()
+
+        view.tvTitleDialog.text = task?.name
 
         if (isChecked) {
             view.btn_delete_task.hideView()
@@ -114,13 +126,13 @@ class TodayFragment : Fragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
         menu.getItem(0).isVisible = true
+        super.onPrepareOptionsMenu(menu)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.toolbar_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -129,4 +141,5 @@ class TodayFragment : Fragment() {
         }
         return super.onOptionsItemSelected(item)
     }
+
 }

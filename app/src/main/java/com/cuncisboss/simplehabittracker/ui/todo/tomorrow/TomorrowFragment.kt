@@ -1,6 +1,7 @@
 package com.cuncisboss.simplehabittracker.ui.todo.tomorrow
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -13,6 +14,8 @@ import com.cuncisboss.simplehabittracker.databinding.FragmentTomorrowBinding
 import com.cuncisboss.simplehabittracker.model.Task
 import com.cuncisboss.simplehabittracker.ui.todo.TodoAdapter
 import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
+import com.cuncisboss.simplehabittracker.util.Constants
+import com.cuncisboss.simplehabittracker.util.Constants.TAG
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TOMORROW
 import com.cuncisboss.simplehabittracker.util.Helper
 import com.cuncisboss.simplehabittracker.util.Helper.disableBackgroundTint
@@ -51,9 +54,9 @@ class TomorrowFragment : Fragment() {
 
         adapter.setChecklistListener { v, task ->
             if (v.id == R.id.btn_checklist) {
-                dialogAlert(true)
+                dialogAlert(task, true)
             } else {
-                dialogAlert(false)
+                dialogAlert(task, false)
             }
         }
     }
@@ -69,17 +72,27 @@ class TomorrowFragment : Fragment() {
         val dialog = builder.create()
 
         dialogBinding.btnSave.setOnClickListener {
-            viewModel.addTask(
-                Task(
-                    0,
-                    dialogBinding.etTask.text.toString(),
-                    Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime()),
-                    TASK_TYPE_TOMORROW,      // 1. repeating, 2. once, 3. certain -> 1. Yesterday 2. Today 3. Tomorrow
-                    dialogBinding.etReward.text.toString().toInt()
-                )
-            )
-            requireView().showSnackbarMessage("Task added")
-            dialog.dismiss()
+            when {
+                dialogBinding.etTask.text.isEmpty() -> {
+                    dialogBinding.etTask.error = "Task should not be empty"
+                }
+                dialogBinding.etReward.text.isEmpty() -> {
+                    dialogBinding.etReward.error = "Reward should not be empty"
+                }
+                else -> {
+                    viewModel.addTask(
+                        Task(
+                            0,
+                            dialogBinding.etTask.text.toString(),
+                            Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime()),
+                            TASK_TYPE_TOMORROW,      // 1. repeating, 2. once, 3. certain -> 1. Yesterday 2. Today 3. Tomorrow
+                            dialogBinding.etReward.text.toString().toInt()
+                        )
+                    )
+                    requireView().showSnackbarMessage("Task added")
+                    dialog.dismiss()
+                }
+            }
         }
 
         dialogBinding.btnCancel.setOnClickListener {
@@ -89,13 +102,15 @@ class TomorrowFragment : Fragment() {
         dialog.show()
     }
 
-    private fun dialogAlert(isChecked: Boolean) {
+    private fun dialogAlert(task: Task?, isChecked: Boolean) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setCancelable(true)
         val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_alert_actions, null as ViewGroup?)
         builder.setView(view)
 
         val dialog = builder.create()
+
+        view.tvTitleDialog.text = task?.name
 
         if (isChecked) {
             view.btn_delete_task.hideView()
@@ -114,8 +129,8 @@ class TomorrowFragment : Fragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
         menu.getItem(0).isVisible = true
+        super.onPrepareOptionsMenu(menu)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
