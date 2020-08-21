@@ -122,6 +122,14 @@ class TodayFragment : Fragment() {
             view.btn_done_task.hideView()
         }
 
+        view.btn_delete_task.setOnClickListener {
+            if (task != null) {
+                viewModel.removeTask(task)
+                dialog.dismiss()
+                requireView().showSnackbarMessage("Task deleted")
+            }
+        }
+
         dialog.show()
     }
 

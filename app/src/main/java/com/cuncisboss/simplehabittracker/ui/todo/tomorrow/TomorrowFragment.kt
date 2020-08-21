@@ -122,7 +122,11 @@ class TomorrowFragment : Fragment() {
         }
 
         view.btn_delete_task.setOnClickListener {
-            Toast.makeText(requireContext(), "Delete task tomorrow", Toast.LENGTH_SHORT).show()
+            if (task != null) {
+                viewModel.removeTask(task)
+                dialog.dismiss()
+                requireView().showSnackbarMessage("Task deleted")
+            }
         }
 
         dialog.show()

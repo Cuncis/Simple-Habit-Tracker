@@ -18,6 +18,7 @@ import com.cuncisboss.simplehabittracker.util.Constants
 import com.cuncisboss.simplehabittracker.util.Constants.TAG
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_YESTERDAY
 import com.cuncisboss.simplehabittracker.util.Helper.reverseThis
+import com.cuncisboss.simplehabittracker.util.Helper.showSnackbarMessage
 import com.cuncisboss.simplehabittracker.util.VisibleHelper.hideView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_alert_actions.view.*
@@ -74,6 +75,14 @@ class YesterdayFragment : Fragment() {
             view.btn_skip_task.hideView()
         } else {
             view.btn_done_task.hideView()
+        }
+
+        view.btn_delete_task.setOnClickListener {
+            if (task != null) {
+                viewModel.removeTask(task)
+                dialog.dismiss()
+                requireView().showSnackbarMessage("Task deleted")
+            }
         }
 
         dialog.show()
