@@ -1,5 +1,6 @@
 package com.cuncisboss.simplehabittracker.ui.todo.tomorrow
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -28,6 +29,7 @@ import org.koin.android.ext.android.inject
 class TomorrowFragment : Fragment() {
 
     private val viewModel by inject<TodoViewModel>()
+    private val pref by inject<SharedPreferences>()
 
     private lateinit var binding: FragmentTomorrowBinding
 
@@ -43,8 +45,16 @@ class TomorrowFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "dialogInsert: ${Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(1))}")
-        Log.d(TAG, "dialogInsert: ${Helper.getCurrentDatetime(1)}")
+        Log.d(TAG, "tomorrow: ${Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(1))}")
+        Log.d(TAG, "tomorrow: ${Helper.getCurrentDatetime(1)}")
+
+        if (pref.getString(Constants.KEY_CURRENT_DATE, "") != "") {
+            if (Helper.checkIsToday(pref.getString(Constants.KEY_CURRENT_DATE, "").toString()) == 1) {    // today
+                Toast.makeText(requireContext(), "nothing because today", Toast.LENGTH_SHORT).show()
+            } else {
+                // do great magic
+            }
+        }
 
         val adapter = TodoAdapter()
         binding.rvTomorrow.adapter = adapter

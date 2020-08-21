@@ -22,7 +22,7 @@ object Helper {
     }
 
     fun getCurrentDatetime(incOrDec: Int): String {
-        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm", Locale.getDefault())
+        val sdf = SimpleDateFormat("dd/M/yyyy", Locale.getDefault())
         val calendar = Calendar.getInstance()
         calendar.time = Date()
         calendar.add(Calendar.DATE, incOrDec)
@@ -30,7 +30,7 @@ object Helper {
     }
 
     fun formatToYesterdayOrTodayOrTomorrow(date: String): String {
-        val datetime = SimpleDateFormat("dd/M/yyyy hh:mm", Locale.getDefault()).parse(date)
+        val datetime = SimpleDateFormat("dd/M/yyyy", Locale.getDefault()).parse(date)
         val calendar = Calendar.getInstance()
         calendar.time = datetime as Date
         val today = Calendar.getInstance()
@@ -45,6 +45,25 @@ object Helper {
             "Yesterday"
         } else {
             "Tomorrow"
+        }
+    }
+
+    fun checkIsToday(date: String): Int {
+        val datetime = SimpleDateFormat("dd/M/yyyy", Locale.getDefault()).parse(date)
+        val calendar = Calendar.getInstance()
+        calendar.time = datetime as Date
+        val today = Calendar.getInstance()
+        val yesterday = Calendar.getInstance()
+        yesterday.add(Calendar.DATE, -1)
+
+        return if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+            && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+            1
+        } else if (calendar.get(Calendar.YEAR) == yesterday.get(Calendar.YEAR)
+            && calendar.get(Calendar.DAY_OF_YEAR) == yesterday.get(Calendar.DAY_OF_YEAR)) {
+            0
+        } else {
+            2
         }
     }
 

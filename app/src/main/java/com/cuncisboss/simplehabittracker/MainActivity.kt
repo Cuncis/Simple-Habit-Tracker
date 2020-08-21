@@ -1,17 +1,37 @@
 package com.cuncisboss.simplehabittracker
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.cuncisboss.simplehabittracker.util.Constants
+import com.cuncisboss.simplehabittracker.util.Constants.KEY_CURRENT_DATE
+import com.cuncisboss.simplehabittracker.util.Helper
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
+
+    private val pref by inject<SharedPreferences>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        if (pref.getString(KEY_CURRENT_DATE, "") == "") {
+            pref.edit().putString(KEY_CURRENT_DATE, Helper.getCurrentDatetime(0)).apply()
+            Toast.makeText(this, "new date added", Toast.LENGTH_SHORT).show()
+        } else {
+            if (Helper.checkIsToday(pref.getString(KEY_CURRENT_DATE, "").toString()) == 1) {    // today
+                Toast.makeText(this, "nothing because today", Toast.LENGTH_SHORT).show()
+            } else {
+                pref.edit().putString(KEY_CURRENT_DATE, Helper.getCurrentDatetime(0)).apply()     // yesterday++
+                Toast.makeText(this, "update date", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         setSupportActionBar(toolbar)
         bottom_navigation_view.setupWithNavController(nav_host_fragment.findNavController())

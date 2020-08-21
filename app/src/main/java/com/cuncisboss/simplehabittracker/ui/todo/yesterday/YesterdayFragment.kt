@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -48,13 +49,24 @@ class YesterdayFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(Constants.TAG, "dialogInsert: ${Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(-1))}")
-        Log.d(Constants.TAG, "dialogInsert: ${Helper.getCurrentDatetime(-1)}")
+        Log.d(TAG, "yesterday: ${Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(-1))}")
+        Log.d(TAG, "yesterday: ${Helper.getCurrentDatetime(-1)}")
+
+        if (pref.getString(Constants.KEY_CURRENT_DATE, "") != "") {
+            if (Helper.checkIsToday(pref.getString(Constants.KEY_CURRENT_DATE, "").toString()) == 1) {    // today
+                Toast.makeText(requireContext(), "nothing because today", Toast.LENGTH_SHORT).show()
+            } else {
+                // do great magic
+            }
+        }
 
         val adapter = TodoAdapter()
         binding.rvYesterday.adapter = adapter
 
         viewModel.getTasks(TASK_TYPE_YESTERDAY).observe(viewLifecycleOwner, Observer {
+            for (i in it.indices) {
+                Log.d(TAG, "onViewCreated: Date: ${it[i].date}")
+            }
             it.reverseThis()
             adapter.submitList(it)
         })

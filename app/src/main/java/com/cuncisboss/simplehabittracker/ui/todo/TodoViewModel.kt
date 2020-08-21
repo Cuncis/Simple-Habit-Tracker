@@ -31,4 +31,8 @@ class TodoViewModel(private val taskDao: TaskDao) : ViewModel() {
         taskDao.removeAllTask()
     }
 
+    fun updateAllTaskByDate(datetime: String, type: Int) = viewModelScope.launch {
+        taskDao.updateAllTaskByDate(datetime, type)
+    }
+
 }
