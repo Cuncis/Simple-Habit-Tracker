@@ -9,7 +9,7 @@ data class Task(
     var icon: Int,
     var name: String,
     var date: String,
-    var type: Int,
+    var type: Int,          // yesterday: 1, today: 2, tomorrow: 3
     var value: Long,
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0

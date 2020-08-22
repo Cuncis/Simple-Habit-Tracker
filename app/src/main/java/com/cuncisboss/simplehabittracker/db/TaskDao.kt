@@ -23,6 +23,9 @@ interface TaskDao {
     @Query("DELETE FROM task_table")
     suspend fun removeAllTask()
 
-    @Query("UPDATE task_table SET date=:datetime WHERE type =:type")
-    suspend fun updateAllTaskByDate(datetime: String, type: Int)
+    @Query("DELETE FROM task_table WHERE type =:type")
+    suspend fun removeTaskByType(type: Int)
+
+    @Query("UPDATE task_table SET date=:datetime AND type =:newType WHERE type =:oldType")
+    suspend fun updateAllTaskByDate(datetime: String, oldType: Int, newType: Int)
 }

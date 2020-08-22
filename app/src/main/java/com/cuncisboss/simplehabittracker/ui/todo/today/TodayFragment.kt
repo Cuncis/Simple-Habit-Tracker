@@ -49,18 +49,19 @@ class TodayFragment : Fragment() {
         Log.d(TAG, "today: ${Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(0))}")
         Log.d(TAG, "today: ${Helper.getCurrentDatetime(0)}")
 
-        if (pref.getString(Constants.KEY_CURRENT_DATE, "") != "") {
-            if (Helper.checkIsToday(pref.getString(Constants.KEY_CURRENT_DATE, "").toString()) == 1) {    // today
-                Toast.makeText(requireContext(), "nothing because today", Toast.LENGTH_SHORT).show()
-            } else {
-                // do great magic
-            }
-        }
+//        if (pref.getString(Constants.KEY_CURRENT_DATE, "") != "") {
+//            if (Helper.checkIsToday(pref.getString(Constants.KEY_CURRENT_DATE, "").toString()) == 1) {    // today
+//                Toast.makeText(requireContext(), "nothing because today", Toast.LENGTH_SHORT).show()
+//            } else {
+//                // do great magic
+//            }
+//        }
 
         val adapter = TodoAdapter()
         binding.rvToday.adapter = adapter
 
         viewModel.getTasks(TASK_TYPE_TODAY).observe(viewLifecycleOwner, Observer {
+            Log.d(TAG, "onViewCreated: $it")
             it.reverseThis()
             adapter.submitList(it)
         })

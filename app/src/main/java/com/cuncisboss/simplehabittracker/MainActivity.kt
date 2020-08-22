@@ -7,8 +7,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
 import com.cuncisboss.simplehabittracker.util.Constants
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_CURRENT_DATE
+import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_YESTERDAY
 import com.cuncisboss.simplehabittracker.util.Helper
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
@@ -16,6 +18,7 @@ import org.koin.android.ext.android.inject
 class MainActivity : AppCompatActivity() {
 
     private val pref by inject<SharedPreferences>()
+    private val viewModel by inject<TodoViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +32,9 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "nothing because today", Toast.LENGTH_SHORT).show()
             } else {
                 pref.edit().putString(KEY_CURRENT_DATE, Helper.getCurrentDatetime(0)).apply()     // yesterday++
+
+                // yesterday
+                viewModel.removeTaskByType(TASK_TYPE_YESTERDAY)
                 Toast.makeText(this, "update date", Toast.LENGTH_SHORT).show()
             }
         }

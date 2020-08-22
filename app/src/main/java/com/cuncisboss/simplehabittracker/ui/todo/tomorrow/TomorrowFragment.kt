@@ -16,7 +16,9 @@ import com.cuncisboss.simplehabittracker.model.Task
 import com.cuncisboss.simplehabittracker.ui.todo.TodoAdapter
 import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
 import com.cuncisboss.simplehabittracker.util.Constants
+import com.cuncisboss.simplehabittracker.util.Constants.KEY_CURRENT_DATE
 import com.cuncisboss.simplehabittracker.util.Constants.TAG
+import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TODAY
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TOMORROW
 import com.cuncisboss.simplehabittracker.util.Helper
 import com.cuncisboss.simplehabittracker.util.Helper.disableBackgroundTint
@@ -48,13 +50,18 @@ class TomorrowFragment : Fragment() {
         Log.d(TAG, "tomorrow: ${Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(1))}")
         Log.d(TAG, "tomorrow: ${Helper.getCurrentDatetime(1)}")
 
-        if (pref.getString(Constants.KEY_CURRENT_DATE, "") != "") {
-            if (Helper.checkIsToday(pref.getString(Constants.KEY_CURRENT_DATE, "").toString()) == 1) {    // today
-                Toast.makeText(requireContext(), "nothing because today", Toast.LENGTH_SHORT).show()
-            } else {
-                // do great magic
-            }
-        }
+//        if (pref.getString(KEY_CURRENT_DATE, "") != "") {
+//            if (Helper.checkIsToday(pref.getString(KEY_CURRENT_DATE, "").toString()) == 1) {    // today
+//                Toast.makeText(requireContext(), "nothing because today", Toast.LENGTH_SHORT).show()
+//            } else {
+//                // do great magic
+////                viewModel.updateAllTaskByDate(
+////                    Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(0)),
+////                    TASK_TYPE_TOMORROW,     // old
+////                    TASK_TYPE_TODAY         // new
+////                )
+//            }
+//        }
 
         val adapter = TodoAdapter()
         binding.rvTomorrow.adapter = adapter
