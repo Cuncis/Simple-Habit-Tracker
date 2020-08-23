@@ -22,4 +22,6 @@ object Constants {
     const val ACTION_SERVICE = "ACTION_SERVICE"
 
     const val ACTION_SHOW_TODO_FRAGMENT = "ACTION_SHOW_TODO_FRAGMENT"
+
+    const val TAG_INSERT = "TAG_INSERT"
 }
