@@ -24,4 +24,6 @@ object Constants {
     const val ACTION_SHOW_TODO_FRAGMENT = "ACTION_SHOW_TODO_FRAGMENT"
 
     const val TAG_INSERT = "TAG_INSERT"
+
+    const val CURRENT_POSITION_KEY = "CURRENT_POSITION_KEY"
 }

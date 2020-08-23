@@ -52,14 +52,6 @@ class YesterdayFragment : Fragment() {
         Log.d(TAG, "yesterday: ${Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(-1))}")
         Log.d(TAG, "yesterday: ${Helper.getCurrentDatetime(-1)}")
 
-//        if (pref.getString(Constants.KEY_CURRENT_DATE, "") != "") {
-//            if (Helper.checkIsToday(pref.getString(Constants.KEY_CURRENT_DATE, "").toString()) == 1) {    // today
-//                Toast.makeText(requireContext(), "nothing because today", Toast.LENGTH_SHORT).show()
-//            } else {
-//                // do great magic
-//            }
-//        }
-
         val adapter = TodoAdapter()
         binding.rvYesterday.adapter = adapter
 

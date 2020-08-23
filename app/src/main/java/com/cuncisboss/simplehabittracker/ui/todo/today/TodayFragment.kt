@@ -4,13 +4,11 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.cuncisboss.simplehabittracker.R
-import com.cuncisboss.simplehabittracker.databinding.DialogAddTaskBinding
 import com.cuncisboss.simplehabittracker.databinding.FragmentTodayBinding
 import com.cuncisboss.simplehabittracker.model.Task
 import com.cuncisboss.simplehabittracker.ui.todo.TodoAdapter
@@ -25,7 +23,6 @@ import com.cuncisboss.simplehabittracker.util.Helper
 import com.cuncisboss.simplehabittracker.util.Helper.reverseThis
 import com.cuncisboss.simplehabittracker.util.Helper.showSnackbarMessage
 import com.cuncisboss.simplehabittracker.util.VisibleHelper.hideView
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.dialog_alert_actions.view.*
 import org.koin.android.ext.android.inject
 

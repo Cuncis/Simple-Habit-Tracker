@@ -14,7 +14,8 @@
         app:tabTextColor="@color/material_on_background_emphasis_high_type"
         app:tabIndicatorColor="@color/md_blue_900"
         app:tabBackground="@drawable/tab_color_selector"
-        android:minWidth="8dp"/>
+        android:minWidth="8dp"
+        app:tabMaxWidth="0dp"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/pager_todo"

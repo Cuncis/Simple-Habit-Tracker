@@ -3,19 +3,11 @@ package com.cuncisboss.simplehabittracker.ui.todo
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.cuncisboss.simplehabittracker.R
 import com.cuncisboss.simplehabittracker.databinding.DialogAddTaskBinding
-import com.cuncisboss.simplehabittracker.model.Task
-import com.cuncisboss.simplehabittracker.util.Constants
-import com.cuncisboss.simplehabittracker.util.Helper
-import com.cuncisboss.simplehabittracker.util.Helper.showSnackbarMessage
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.dialog_add_task.view.*
 
 class TodoDialog : DialogFragment() {
 
@@ -24,10 +16,6 @@ class TodoDialog : DialogFragment() {
 
     fun setSaveListener(saveListener: (String, Long) -> Unit) {
         this.saveListener = saveListener
-    }
-
-    fun setCancelListener(cancelListener: () -> Unit) {
-        this.cancelListener = cancelListener
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -58,9 +46,9 @@ class TodoDialog : DialogFragment() {
                             binding.etTask.text.toString(),
                             binding.etReward.text.toString().toLong()
                         )
+                        dialog.dismiss()
                     }
                 }
-                dialog.dismiss()
             }
         }
 

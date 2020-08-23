@@ -1,24 +1,20 @@
 package com.cuncisboss.simplehabittracker.ui.todo.tomorrow
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.cuncisboss.simplehabittracker.R
-import com.cuncisboss.simplehabittracker.databinding.DialogAddTaskBinding
 import com.cuncisboss.simplehabittracker.databinding.FragmentTomorrowBinding
 import com.cuncisboss.simplehabittracker.model.Task
 import com.cuncisboss.simplehabittracker.ui.todo.TodoAdapter
+import com.cuncisboss.simplehabittracker.ui.todo.TodoDialog
 import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
 import com.cuncisboss.simplehabittracker.util.Constants
-import com.cuncisboss.simplehabittracker.util.Constants.KEY_CURRENT_DATE
 import com.cuncisboss.simplehabittracker.util.Constants.TAG
-import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TODAY
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TOMORROW
 import com.cuncisboss.simplehabittracker.util.Helper
 import com.cuncisboss.simplehabittracker.util.Helper.disableBackgroundTint
@@ -31,7 +27,6 @@ import org.koin.android.ext.android.inject
 class TomorrowFragment : Fragment() {
 
     private val viewModel by inject<TodoViewModel>()
-    private val pref by inject<SharedPreferences>()
 
     private lateinit var binding: FragmentTomorrowBinding
 
@@ -50,18 +45,22 @@ class TomorrowFragment : Fragment() {
         Log.d(TAG, "tomorrow: ${Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(1))}")
         Log.d(TAG, "tomorrow: ${Helper.getCurrentDatetime(1)}")
 
-//        if (pref.getString(KEY_CURRENT_DATE, "") != "") {
-//            if (Helper.checkIsToday(pref.getString(KEY_CURRENT_DATE, "").toString()) == 1) {    // today
-//                Toast.makeText(requireContext(), "nothing because today", Toast.LENGTH_SHORT).show()
-//            } else {
-//                // do great magic
-////                viewModel.updateAllTaskByDate(
-////                    Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(0)),
-////                    TASK_TYPE_TOMORROW,     // old
-////                    TASK_TYPE_TODAY         // new
-////                )
-//            }
-//        }
+        if (savedInstanceState != null) {
+            val todoDialog = childFragmentManager
+                .findFragmentByTag(Constants.TAG_INSERT) as TodoDialog?
+            todoDialog?.setSaveListener { taskName, reward ->
+                viewModel.addTask(
+                    Task(
+                        0,
+                        taskName,
+                        Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(1)),
+                        TASK_TYPE_TOMORROW,      // 1. repeating, 2. once, 3. certain -> 1. Yesterday 2. Today 3. Tomorrow
+                        reward
+                    )
+                )
+                (requireParentFragment().view as View).showSnackbarMessage("Task added")
+            }
+        }
 
         val adapter = TodoAdapter()
         binding.rvTomorrow.adapter = adapter
@@ -80,45 +79,21 @@ class TomorrowFragment : Fragment() {
         }
     }
 
-    private fun dialogInsert() {
-        val builder = AlertDialog.Builder(requireContext())
-        val dialogBinding = DataBindingUtil.inflate(
-            LayoutInflater.from(requireContext()),
-            R.layout.dialog_add_task, null, false
-        ) as DialogAddTaskBinding
-        builder.setView(dialogBinding.root)
-
-        val dialog = builder.create()
-
-        dialogBinding.btnSave.setOnClickListener {
-            when {
-                dialogBinding.etTask.text.isEmpty() -> {
-                    dialogBinding.etTask.error = "Task should not be empty"
-                }
-                dialogBinding.etReward.text.isEmpty() -> {
-                    dialogBinding.etReward.error = "Reward should not be empty"
-                }
-                else -> {
-                    viewModel.addTask(
-                        Task(
-                            0,
-                            dialogBinding.etTask.text.toString(),
-                            Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(1)),
-                            TASK_TYPE_TOMORROW,      // 1. repeating, 2. once, 3. certain -> 1. Yesterday 2. Today 3. Tomorrow
-                            dialogBinding.etReward.text.toString().toLong()
-                        )
+    private fun showInsertDialog() {
+        TodoDialog().apply {
+            setSaveListener { taskName, reward ->
+                viewModel.addTask(
+                    Task(
+                        0,
+                        taskName,
+                        Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(1)),
+                        TASK_TYPE_TOMORROW,      // 1. repeating, 2. once, 3. certain -> 1. Yesterday 2. Today 3. Tomorrow
+                        reward
                     )
-                    requireView().showSnackbarMessage("Task added")
-                    dialog.dismiss()
-                }
+                )
+                (requireParentFragment().view as View).showSnackbarMessage("Task added")
             }
-        }
-
-        dialogBinding.btnCancel.setOnClickListener {
-            dialog.cancel()
-        }
-
-        dialog.show()
+        }.show(childFragmentManager, Constants.TAG_INSERT)
     }
 
     private fun dialogAlert(task: Task?, isChecked: Boolean) {
@@ -163,7 +138,7 @@ class TomorrowFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_add) {
-            dialogInsert()
+            showInsertDialog()
         }
         return super.onOptionsItemSelected(item)
     }

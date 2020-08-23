@@ -2,13 +2,12 @@ package com.cuncisboss.simplehabittracker.ui.todo
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.Menu
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.cuncisboss.simplehabittracker.R
-import com.cuncisboss.simplehabittracker.util.Constants
+import com.cuncisboss.simplehabittracker.util.Constants.CURRENT_POSITION_KEY
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_CURRENT_DATE
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TODAY
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TOMORROW
@@ -17,7 +16,6 @@ import com.cuncisboss.simplehabittracker.util.Helper
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_container_tabs_todo.*
 import org.koin.android.ext.android.inject
-import java.util.concurrent.atomic.AtomicBoolean
 
 class ContainerTabsTodoFragment : Fragment(R.layout.fragment_container_tabs_todo) {
 
@@ -37,7 +35,7 @@ class ContainerTabsTodoFragment : Fragment(R.layout.fragment_container_tabs_todo
                     TASK_TYPE_TOMORROW,     // old
                     TASK_TYPE_TODAY         // new
                 )
-                // today - YESTERDAY
+                // today -> YESTERDAY
                 viewModel.updateAllTaskByDate(
                     Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(-1)),
                     TASK_TYPE_TODAY,        // old
@@ -46,14 +44,17 @@ class ContainerTabsTodoFragment : Fragment(R.layout.fragment_container_tabs_todo
             }
         }
 
+//        if (savedInstanceState != null) {
+//            val currentPos = savedInstanceState.getInt(CURRENT_POSITION_KEY)
+//            tab_todo.getTabAt(currentPos)?.select()
+//            pager_todo.setCurrentItem(currentPos, false)
+//        }
+
+
         pager_todo.adapter = ViewStateAdapter(childFragmentManager, lifecycle)
         tab_todo.addTab(tab_todo.newTab().setText("Yesterday"))
         tab_todo.addTab(tab_todo.newTab().setText("Today"))
         tab_todo.addTab(tab_todo.newTab().setText("Tomorrow"))
-
-        pager_todo.setCurrentItem(1, false)
-        tab_todo.getTabAt(1)?.select()
-
         tab_todo.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 pager_todo.currentItem = tab?.position.toString().toInt()
@@ -70,4 +71,15 @@ class ContainerTabsTodoFragment : Fragment(R.layout.fragment_container_tabs_todo
             }
         })
     }
+
+    override fun onResume() {
+        super.onResume()
+        tab_todo.getTabAt(1)?.select()
+        pager_todo.setCurrentItem(1, false)
+    }
+
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        outState.putInt(CURRENT_POSITION_KEY, pager_todo.currentItem)
+//        super.onSaveInstanceState(outState)
+//    }
 }
