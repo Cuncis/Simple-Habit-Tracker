@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.cuncisboss.simplehabittracker.db.TaskDao
 import com.cuncisboss.simplehabittracker.model.Task
 import com.niwattep.materialslidedatepicker.SlideDatePickerDialogViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class TodoViewModel(private val taskDao: TaskDao) : ViewModel() {

@@ -152,8 +152,8 @@ class TomorrowFragment : Fragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.getItem(0).isVisible = true
         super.onPrepareOptionsMenu(menu)
+        menu.getItem(0).isVisible = menu.findItem(R.id.action_add) != null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

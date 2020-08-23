@@ -32,13 +32,13 @@ class ContainerTabsTodoFragment : Fragment(R.layout.fragment_container_tabs_todo
             if (Helper.checkIsToday(pref.getString(KEY_CURRENT_DATE, "").toString()) == 1) {    // today
                 Toast.makeText(requireContext(), "nothing because today", Toast.LENGTH_SHORT).show()
             } else {
-                // tomorrow
+                // tomorrow -> TODAY
                 viewModel.updateAllTaskByDate(
                     Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(0)),
                     TASK_TYPE_TOMORROW,     // old
                     TASK_TYPE_TODAY         // new
                 )
-                // today
+                // today - YESTERDAY
                 viewModel.updateAllTaskByDate(
                     Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(-1)),
                     TASK_TYPE_TODAY,        // old

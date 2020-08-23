@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -16,7 +15,6 @@ import com.cuncisboss.simplehabittracker.model.Task
 import com.cuncisboss.simplehabittracker.ui.todo.TodoAdapter
 import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
 import com.cuncisboss.simplehabittracker.util.Constants
-import com.cuncisboss.simplehabittracker.util.Constants.KEY_CURRENT_DATE
 import com.cuncisboss.simplehabittracker.util.Constants.TAG
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TODAY
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TOMORROW
@@ -110,7 +108,7 @@ class TodayFragment : Fragment() {
         }
 
         dialogBinding.btnCancel.setOnClickListener {
-            dialog.cancel()
+            dialog.dismiss()
         }
 
         dialog.show()
@@ -172,8 +170,8 @@ class TodayFragment : Fragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.getItem(0).isVisible = true
         super.onPrepareOptionsMenu(menu)
+        menu.getItem(0).isVisible = menu.findItem(R.id.action_add) != null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -184,6 +182,7 @@ class TodayFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_add) {
             dialogInsert()
+//            viewModel.removeAllTask()
         }
         return super.onOptionsItemSelected(item)
     }
