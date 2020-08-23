@@ -26,7 +26,6 @@ class ContainerTabsTodoFragment : Fragment(R.layout.fragment_container_tabs_todo
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(false)
 
         if (pref.getString(KEY_CURRENT_DATE, "") != "") {
             if (Helper.checkIsToday(pref.getString(KEY_CURRENT_DATE, "").toString()) == 1) {    // today
@@ -47,7 +46,7 @@ class ContainerTabsTodoFragment : Fragment(R.layout.fragment_container_tabs_todo
             }
         }
 
-        pager_todo.adapter = ViewStateAdapter(parentFragmentManager, lifecycle)
+        pager_todo.adapter = ViewStateAdapter(childFragmentManager, lifecycle)
         tab_todo.addTab(tab_todo.newTab().setText("Yesterday"))
         tab_todo.addTab(tab_todo.newTab().setText("Today"))
         tab_todo.addTab(tab_todo.newTab().setText("Tomorrow"))
@@ -70,10 +69,5 @@ class ContainerTabsTodoFragment : Fragment(R.layout.fragment_container_tabs_todo
                 tab_todo.selectTab(tab_todo.getTabAt(position))
             }
         })
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
-        menu.getItem(0).isVisible = false
     }
 }
