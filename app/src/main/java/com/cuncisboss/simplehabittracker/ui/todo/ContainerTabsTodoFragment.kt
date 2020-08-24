@@ -25,25 +25,6 @@ class ContainerTabsTodoFragment : Fragment(R.layout.fragment_container_tabs_todo
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (pref.getString(KEY_CURRENT_DATE, "") != "") {
-            if (Helper.checkIsToday(pref.getString(KEY_CURRENT_DATE, "").toString()) == 1) {    // today
-                Toast.makeText(requireContext(), "nothing because today", Toast.LENGTH_SHORT).show()
-            } else {
-                // tomorrow -> TODAY
-                viewModel.updateAllTaskByDate(
-                    Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(0)),
-                    TASK_TYPE_TOMORROW,     // old
-                    TASK_TYPE_TODAY         // new
-                )
-                // today -> YESTERDAY
-                viewModel.updateAllTaskByDate(
-                    Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(-1)),
-                    TASK_TYPE_TODAY,        // old
-                    TASK_TYPE_YESTERDAY     // new
-                )
-            }
-        }
-
 //        if (savedInstanceState != null) {
 //            val currentPos = savedInstanceState.getInt(CURRENT_POSITION_KEY)
 //            tab_todo.getTabAt(currentPos)?.select()

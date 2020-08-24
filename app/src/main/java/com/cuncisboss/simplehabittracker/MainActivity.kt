@@ -13,6 +13,7 @@ import com.cuncisboss.simplehabittracker.util.Constants.KEY_CURRENT_DATE
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_YESTERDAY
 import com.cuncisboss.simplehabittracker.util.Helper
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
@@ -31,10 +32,26 @@ class MainActivity : AppCompatActivity() {
             if (Helper.checkIsToday(pref.getString(KEY_CURRENT_DATE, "").toString()) == 1) {    // today
                 Toast.makeText(this, "nothing because today", Toast.LENGTH_SHORT).show()
             } else {
-                pref.edit().putString(KEY_CURRENT_DATE, Helper.getCurrentDatetime(0)).apply()     // yesterday++
-
                 // yesterday
                 viewModel.removeTaskByType(TASK_TYPE_YESTERDAY)
+
+                // today -> YESTERDAY
+                viewModel.updateAllTaskByDate(
+                    Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(-1)),
+                    Constants.TASK_TYPE_TODAY,        // old
+                    TASK_TYPE_YESTERDAY     // new
+                )
+
+                // tommorow -> TODAY
+                viewModel.updateAllTaskByDate(
+                    Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(0)),
+                    Constants.TASK_TYPE_TOMORROW,     // old
+                    Constants.TASK_TYPE_TODAY         // new
+                )
+
+                pref.edit()
+                    .putString(KEY_CURRENT_DATE, Helper.getCurrentDatetime(0))
+                    .apply()    // yesterday++
                 Toast.makeText(this, "update date", Toast.LENGTH_SHORT).show()
             }
         }
