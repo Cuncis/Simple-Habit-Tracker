@@ -3,16 +3,9 @@ package com.cuncisboss.simplehabittracker.ui.todo
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.cuncisboss.simplehabittracker.R
-import com.cuncisboss.simplehabittracker.util.Constants.CURRENT_POSITION_KEY
-import com.cuncisboss.simplehabittracker.util.Constants.KEY_CURRENT_DATE
-import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TODAY
-import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TOMORROW
-import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_YESTERDAY
-import com.cuncisboss.simplehabittracker.util.Helper
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_container_tabs_todo.*
 import org.koin.android.ext.android.inject
@@ -32,7 +25,7 @@ class ContainerTabsTodoFragment : Fragment(R.layout.fragment_container_tabs_todo
 //        }
 
 
-        pager_todo.adapter = ViewStateAdapter(childFragmentManager, lifecycle)
+        pager_todo.adapter = TodoViewStateAdapter(childFragmentManager, lifecycle)
         tab_todo.addTab(tab_todo.newTab().setText("Yesterday"))
         tab_todo.addTab(tab_todo.newTab().setText("Today"))
         tab_todo.addTab(tab_todo.newTab().setText("Tomorrow"))

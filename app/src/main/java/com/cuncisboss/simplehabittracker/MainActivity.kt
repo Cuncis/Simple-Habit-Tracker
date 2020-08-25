@@ -2,18 +2,17 @@ package com.cuncisboss.simplehabittracker
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.Menu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
-import com.cuncisboss.simplehabittracker.util.Constants
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_CURRENT_DATE
+import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TODAY
+import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TOMORROW
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_YESTERDAY
 import com.cuncisboss.simplehabittracker.util.Helper
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
@@ -29,30 +28,33 @@ class MainActivity : AppCompatActivity() {
             pref.edit().putString(KEY_CURRENT_DATE, Helper.getCurrentDatetime(0)).apply()
             Toast.makeText(this, "new date added", Toast.LENGTH_SHORT).show()
         } else {
-            if (Helper.checkIsToday(pref.getString(KEY_CURRENT_DATE, "").toString()) == 1) {    // today
-                Toast.makeText(this, "nothing because today", Toast.LENGTH_SHORT).show()
-            } else {
-                // yesterday
-                viewModel.removeTaskByType(TASK_TYPE_YESTERDAY)
+            when {
+                Helper.checkIsToday(pref.getString(KEY_CURRENT_DATE, "").toString()) == 1 -> {    // today
+                    Toast.makeText(this, "nothing because today", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    // yesterday
+                    viewModel.removeTaskByType(TASK_TYPE_YESTERDAY)
 
-                // today -> YESTERDAY
-                viewModel.updateAllTaskByDate(
-                    Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(-1)),
-                    Constants.TASK_TYPE_TODAY,        // old
-                    TASK_TYPE_YESTERDAY     // new
-                )
+                    // today -> YESTERDAY
+                    viewModel.updateAllTaskByDate(
+                        Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(-1)),
+                        TASK_TYPE_TODAY,        // old
+                        TASK_TYPE_YESTERDAY     // new
+                    )
 
-                // tommorow -> TODAY
-                viewModel.updateAllTaskByDate(
-                    Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(0)),
-                    Constants.TASK_TYPE_TOMORROW,     // old
-                    Constants.TASK_TYPE_TODAY         // new
-                )
+                    // tommorow -> TODAY
+                    viewModel.updateAllTaskByDate(
+                        Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(0)),
+                        TASK_TYPE_TOMORROW,     // old
+                        TASK_TYPE_TODAY         // new
+                    )
 
-                pref.edit()
-                    .putString(KEY_CURRENT_DATE, Helper.getCurrentDatetime(0))
-                    .apply()    // yesterday++
-                Toast.makeText(this, "update date", Toast.LENGTH_SHORT).show()
+                    pref.edit()
+                        .putString(KEY_CURRENT_DATE, Helper.getCurrentDatetime(0))
+                        .apply()    // yesterday++
+                    Toast.makeText(this, "update date", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 

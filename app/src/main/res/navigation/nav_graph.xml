@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_dashboard" />
     <fragment
         android:id="@+id/rewardFragment"
-        android:name="com.cuncisboss.simplehabittracker.ui.RewardFragment"
+        android:name="com.cuncisboss.simplehabittracker.ui.reward.RewardFragment"
         android:label="fragment_reward"
         tools:layout="@layout/fragment_reward" />
     <fragment

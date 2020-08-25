@@ -9,7 +9,7 @@ import com.cuncisboss.simplehabittracker.ui.todo.tomorrow.TomorrowFragment
 import com.cuncisboss.simplehabittracker.ui.todo.yesterday.YesterdayFragment
 
 
-class ViewStateAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
+class TodoViewStateAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fragmentManager, lifecycle) {
 
     override fun createFragment(position: Int): Fragment {

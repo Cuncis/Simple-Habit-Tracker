@@ -12,7 +12,6 @@ import com.cuncisboss.simplehabittracker.databinding.DialogAddTaskBinding
 class TodoDialog : DialogFragment() {
 
     private var saveListener: ((String, Long) -> Unit)? = null
-    private var cancelListener: (() -> Unit)? = null
 
     fun setSaveListener(saveListener: (String, Long) -> Unit) {
         this.saveListener = saveListener
