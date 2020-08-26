@@ -11,11 +11,8 @@ import kotlinx.android.synthetic.main.fragment_reward.*
 
 class RewardFragment : Fragment(R.layout.fragment_reward) {
 
-//    private val pref by inject<SharedPreferences>()
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        tv_text_sample.text = pref.getLong(KEY_TOTAL, 0L).toString()
 
         pager_reward.adapter = RewardViewStateAdapter(childFragmentManager, lifecycle)
         tab_reward.addTab(tab_reward.newTab().setText("Available"))
@@ -35,8 +32,5 @@ class RewardFragment : Fragment(R.layout.fragment_reward) {
                 tab_reward.selectTab(tab_reward.getTabAt(position))
             }
         })
-
     }
-
-
 }

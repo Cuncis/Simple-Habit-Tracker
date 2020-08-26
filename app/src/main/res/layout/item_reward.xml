@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="reward"
+            type="com.cuncisboss.simplehabittracker.model.Reward" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_weight="0.3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_money"
+                tools:text="20 August 2020"
+                android:textSize="16sp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:layout_marginEnd="12dp" />
+
+            <LinearLayout
+                android:layout_weight="1.2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{reward.name}"
+                    tools:text="Beli Lauk"
+                    android:textColor="@color/md_blue_100"
+                    android:textSize="16sp"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_weight="0.6"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:textSize="16sp"
+                android:text="@{String.valueOf(reward.nominal)}"
+                tools:text="500000"
+                android:textColor="@color/colorAccent"
+                android:drawableStart="@drawable/ic_baseline_monetization_on"
+                android:gravity="center"
+                android:paddingEnd="8dp" />
+
+            <ImageButton
+                android:id="@+id/btn_checklist"
+                android:layout_weight="0.4"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_baseline_get_app"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:padding="0dp"
+                style="@style/AppTheme.RoundedCornerMaterialButton"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:contentDescription="@string/CheckList"
+                app:strokeColor="@android:color/white"
+                app:strokeWidth="2dp"
+                tools:ignore="UnusedAttribute" />
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

@@ -5,6 +5,7 @@ import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import androidx.room.Room
 import com.cuncisboss.simplehabittracker.db.HabitTrackerDatabase
+import com.cuncisboss.simplehabittracker.ui.reward.RewardViewModel
 import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
 import com.cuncisboss.simplehabittracker.util.Constants.DATABASE_NAME
 import com.cuncisboss.simplehabittracker.util.Constants.PREF_NAME
@@ -16,16 +17,20 @@ import org.koin.dsl.module
 val localModule = module {
     single { provideDatabase(androidApplication()) }
     single { provideTaskDao(get()) }
+    single { provideRewardDao(get()) }
     single { providePreference(androidApplication()) }
 }
 
 val viewModelModule = module {
     viewModel { TodoViewModel(get()) }
+    viewModel { RewardViewModel(get()) }
 }
 
 
 
 private fun provideTaskDao(db: HabitTrackerDatabase) = db.taskDao()
+
+private fun provideRewardDao(db: HabitTrackerDatabase) = db.rewardDao()
 
 private fun provideDatabase(app: Application) =
     Room.databaseBuilder(app, HabitTrackerDatabase::class.java, DATABASE_NAME).build()

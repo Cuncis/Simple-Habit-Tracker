@@ -12,9 +12,14 @@ import com.cuncisboss.simplehabittracker.databinding.DialogAddTaskBinding
 class TodoDialog : DialogFragment() {
 
     private var saveListener: ((String, Long) -> Unit)? = null
+    private var title: String? = null
 
     fun setSaveListener(saveListener: (String, Long) -> Unit) {
         this.saveListener = saveListener
+    }
+
+    fun editTitleDialog(title: String?) {
+        this.title = title
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -27,6 +32,10 @@ class TodoDialog : DialogFragment() {
         builder.setView(binding.root)
 
         val dialog = builder.create()
+
+        if (title != null) {
+            binding.textTitle.text = title.toString()
+        }
 
         binding.btnCancel.setOnClickListener {
             dialog.dismiss()
