@@ -3,6 +3,7 @@ package com.cuncisboss.simplehabittracker.ui.reward.available
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -48,15 +49,24 @@ class AvailableFragment : Fragment() {
         observeViewModel()
 
         adapter.setListener {
-            AlertDialogHelper().apply {
-                editTitleDialog(it?.name)
-                setClaimedListener(false) {
-                    it?.let {
-                        it.status = KEY_CLAIMED
-                        viewModel.updateReward(it)
-                    }
+            it?.let {
+                val total = pref.getLong(KEY_TOTAL, 0L)
+                if (total > it.nominal) {
+                    AlertDialogHelper().apply {
+                        editTitleDialog(it.name)
+                        setClaimedListener(false) {
+                            val result = total - it.nominal
+                            pref.edit().putLong(KEY_TOTAL, result).apply()
+                            binding.totalMoney = result.toString()
+
+                            it.status = KEY_CLAIMED
+                            viewModel.updateReward(it)
+                        }
+                    }.show(childFragmentManager, TAG_CLAIM)
+                } else {
+                    Toast.makeText(requireContext(), "Gold is not enough!", Toast.LENGTH_SHORT).show()
                 }
-            }.show(childFragmentManager, TAG_CLAIM)
+            }
         }
     }
 

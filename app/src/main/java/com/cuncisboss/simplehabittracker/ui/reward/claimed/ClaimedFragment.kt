@@ -32,6 +32,7 @@ class ClaimedFragment : Fragment(R.layout.fragment_claimed) {
 
         adapter.setListener {
             AlertDialogHelper().apply {
+                editTitleDialog(it?.name)
                 setClaimedListener(true) { /* NO-OP */ }
             }.show(childFragmentManager, TAG_CLAIM)
         }
