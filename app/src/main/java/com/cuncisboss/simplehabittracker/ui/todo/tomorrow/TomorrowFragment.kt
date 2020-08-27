@@ -116,7 +116,7 @@ class TomorrowFragment : Fragment() {
         }
 
         view.btn_delete_task.setOnClickListener {
-            if (task != null) {
+            task?.let {
                 viewModel.removeTask(task)
                 dialog.dismiss()
                 requireView().showSnackbarMessage("Task deleted")

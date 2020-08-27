@@ -3,12 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.reward.claimed.ClaimedFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/rv_claimed"
+        android:layout_marginTop="6dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp" />
 
 </FrameLayout>

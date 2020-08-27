@@ -13,8 +13,8 @@ interface RewardDao {
     @Delete
     suspend fun removeReward(reward: Reward)
 
-    @Query("SELECT * FROM reward_table")
-    fun getAllRewards(): LiveData<List<Reward>>
+    @Query("SELECT * FROM reward_table WHERE status =:status")
+    fun getAllRewardsByStatus(status: String): LiveData<List<Reward>>
 
     @Update
     suspend fun updateReward(reward: Reward)

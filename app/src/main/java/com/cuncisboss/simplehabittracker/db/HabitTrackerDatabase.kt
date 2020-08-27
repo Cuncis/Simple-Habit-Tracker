@@ -6,7 +6,7 @@ import com.cuncisboss.simplehabittracker.model.Reward
 import com.cuncisboss.simplehabittracker.model.Task
 
 
-@Database(entities = [Task::class, Reward::class], version = 2, exportSchema = false)
+@Database(entities = [Task::class, Reward::class], version = 3, exportSchema = false)
 abstract class HabitTrackerDatabase : RoomDatabase() {
 
     abstract fun taskDao(): TaskDao

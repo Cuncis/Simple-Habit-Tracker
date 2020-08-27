@@ -2,11 +2,9 @@ package com.cuncisboss.simplehabittracker.ui.reward.available
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.cuncisboss.simplehabittracker.R
 import com.cuncisboss.simplehabittracker.databinding.FragmentAvailableBinding
@@ -14,8 +12,11 @@ import com.cuncisboss.simplehabittracker.model.Reward
 import com.cuncisboss.simplehabittracker.ui.reward.RewardAdapter
 import com.cuncisboss.simplehabittracker.ui.reward.RewardViewModel
 import com.cuncisboss.simplehabittracker.ui.todo.TodoDialog
+import com.cuncisboss.simplehabittracker.util.AlertDialogHelper
+import com.cuncisboss.simplehabittracker.util.Constants.KEY_AVAILABLE
+import com.cuncisboss.simplehabittracker.util.Constants.KEY_CLAIMED
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_TOTAL
-import com.cuncisboss.simplehabittracker.util.Constants.TAG
+import com.cuncisboss.simplehabittracker.util.Constants.TAG_CLAIM
 import com.cuncisboss.simplehabittracker.util.Constants.TAG_INSERT
 import org.koin.android.ext.android.inject
 
@@ -26,6 +27,8 @@ class AvailableFragment : Fragment() {
 
     private val viewModel by inject<RewardViewModel>()
     private val pref by inject<SharedPreferences>()
+
+    private lateinit var adapter: RewardAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,14 +43,27 @@ class AvailableFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.totalMoney = pref.getLong(KEY_TOTAL, 0L).toString()
 
+        adapter = RewardAdapter()
+
         observeViewModel()
+
+        adapter.setListener {
+            AlertDialogHelper().apply {
+                editTitleDialog(it?.name)
+                setClaimedListener(false) {
+                    it?.let {
+                        it.status = KEY_CLAIMED
+                        viewModel.updateReward(it)
+                    }
+                }
+            }.show(childFragmentManager, TAG_CLAIM)
+        }
     }
 
     private fun observeViewModel() {
-        viewModel.getAllRewards().observe(viewLifecycleOwner, Observer {
-            val adapter = RewardAdapter()
+        viewModel.getAllRewardsByStatus(KEY_AVAILABLE).observe(viewLifecycleOwner, Observer {
             binding.rvAvailable.adapter = adapter
-            adapter.submistList(it)
+            adapter.submitList(it)
         })
     }
 
@@ -58,7 +74,8 @@ class AvailableFragment : Fragment() {
                 viewModel.addReward(
                     Reward(
                         title,
-                        reward
+                        reward,
+                        KEY_AVAILABLE
                     )
                 )
             }
