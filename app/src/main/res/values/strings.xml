@@ -21,6 +21,7 @@
     <string name="edit_task">Edit Task</string>
     <string name="total">Total</string>
     <string name="claim">Claim</string>
+    <string name="edit">Edit</string>
     <string-array name="type_options">
         <item>Repeat</item>
         <item>Once</item>

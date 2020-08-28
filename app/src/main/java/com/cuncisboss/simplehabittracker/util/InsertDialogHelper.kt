@@ -11,7 +11,7 @@ import com.cuncisboss.simplehabittracker.util.Helper.disableBackgroundTint
 import com.cuncisboss.simplehabittracker.util.VisibleHelper.hideView
 import kotlinx.android.synthetic.main.dialog_alert_actions.view.*
 
-class AlertDialogHelper : DialogFragment() {
+class InsertDialogHelper : DialogFragment() {
 
     private var claimedListener: (() -> Unit)? = null
     private var claimed: Boolean = false

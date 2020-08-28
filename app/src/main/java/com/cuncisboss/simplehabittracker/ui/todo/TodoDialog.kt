@@ -8,11 +8,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.cuncisboss.simplehabittracker.R
 import com.cuncisboss.simplehabittracker.databinding.DialogAddTaskBinding
+import org.koin.android.ext.android.bind
 
 class TodoDialog : DialogFragment() {
 
     private var saveListener: ((String, Long) -> Unit)? = null
     private var title: String? = null
+    private var update: String? = null
+    private var name: String? = null
+    private var reward: String? = null
 
     fun setSaveListener(saveListener: (String, Long) -> Unit) {
         this.saveListener = saveListener
@@ -20,6 +24,15 @@ class TodoDialog : DialogFragment() {
 
     fun editTitleDialog(title: String?) {
         this.title = title
+    }
+
+    fun setButtonUpdate(update: String) {
+        this.update = update
+    }
+
+    fun setInitField(name: String?, reward: String?) {
+        this.name = name
+        this.reward = reward
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -33,9 +46,11 @@ class TodoDialog : DialogFragment() {
 
         val dialog = builder.create()
 
-        if (title != null) {
-            binding.textTitle.text = title.toString()
-        }
+        title?.let { binding.textTitle.text = it }
+        update?.let { binding.btnSave.text = it }
+
+        name?.let { binding.etTask.setText(it) }
+        reward?.let { binding.etReward.setText(it) }
 
         binding.btnCancel.setOnClickListener {
             dialog.dismiss()

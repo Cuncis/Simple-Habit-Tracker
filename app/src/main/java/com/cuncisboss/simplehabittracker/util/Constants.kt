@@ -17,6 +17,7 @@ object Constants {
 
     const val KEY_AVAILABLE = "Available"
     const val KEY_CLAIMED = "Claimed"
+    const val KEY_OPTION = "Option"
 
     const val NOTIFICATION_CHANNEL_ID = "task_channel"
     const val NOTIFICATION_CHANNEL_NAME = "Task"

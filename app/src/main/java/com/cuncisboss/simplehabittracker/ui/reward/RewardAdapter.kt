@@ -1,6 +1,7 @@
 package com.cuncisboss.simplehabittracker.ui.reward
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +12,7 @@ import com.cuncisboss.simplehabittracker.util.Helper.disableBackgroundTint
 
 class RewardAdapter : RecyclerView.Adapter<RewardAdapter.ViewHolder>() {
 
-    private var listener: ((Reward?) -> Unit)? = null
+    private var listener: ((View, Reward?) -> Unit)? = null
 
     private var rewardList = arrayListOf<Reward>()
 
@@ -31,7 +32,10 @@ class RewardAdapter : RecyclerView.Adapter<RewardAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.reward = rewardList[position]
         holder.binding.btnChecklist.setOnClickListener {
-            listener?.invoke(rewardList[position])
+            listener?.invoke(it, rewardList[position])
+        }
+        holder.itemView.setOnClickListener {
+            listener?.invoke(it, rewardList[position])
         }
         if (claimed) {
             holder.binding.btnChecklist.disableBackgroundTint()
@@ -48,7 +52,7 @@ class RewardAdapter : RecyclerView.Adapter<RewardAdapter.ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    fun setListener(listener: (Reward?) -> Unit) {
+    fun setListener(listener: (View, Reward?) -> Unit) {
         this.listener = listener
     }
 
