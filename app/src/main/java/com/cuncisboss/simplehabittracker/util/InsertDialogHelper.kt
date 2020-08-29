@@ -59,5 +59,4 @@ class InsertDialogHelper : DialogFragment() {
 
         return dialog
     }
-
 }
