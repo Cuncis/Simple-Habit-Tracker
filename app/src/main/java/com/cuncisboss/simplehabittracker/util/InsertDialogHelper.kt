@@ -16,9 +16,14 @@ class InsertDialogHelper : DialogFragment() {
     private var claimedListener: (() -> Unit)? = null
     private var claimed: Boolean = false
     private var title: String? = null
+    private var btnName: String? = null
 
     fun editTitleDialog(title: String?) {
         this.title = title
+    }
+
+    fun editBtnNameDialog(btnName: String?) {
+        this.btnName = btnName
     }
 
     fun setClaimedListener(claimed: Boolean, claimedListener: () -> Unit) {
@@ -44,7 +49,7 @@ class InsertDialogHelper : DialogFragment() {
         }
         view.tvTitleDialog.text = title.toString()
 
-        view.btn_done_task.text = getString(R.string.claim)
+        view.btn_done_task.text = btnName.toString()
         view.btn_done_task.setOnClickListener {
             claimedListener?.let { claim ->
                 claim()

@@ -17,6 +17,10 @@ class RewardViewModel(private val rewardDao: RewardDao): ViewModel() {
         rewardDao.removeReward(reward)
     }
 
+    fun removeAllReward() = viewModelScope.launch {
+        rewardDao.removeAllReward()
+    }
+
     fun getAllRewardsByStatus(status: String): LiveData<List<Reward>> {
         return rewardDao.getAllRewardsByStatus(status)
     }

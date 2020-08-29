@@ -13,6 +13,9 @@ interface RewardDao {
     @Delete
     suspend fun removeReward(reward: Reward)
 
+    @Query("DELETE FROM reward_table")
+    suspend fun removeAllReward()
+
     @Query("SELECT * FROM reward_table WHERE status =:status")
     fun getAllRewardsByStatus(status: String): LiveData<List<Reward>>
 

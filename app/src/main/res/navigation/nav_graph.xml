@@ -17,7 +17,7 @@
         tools:layout="@layout/fragment_reward" />
     <fragment
         android:id="@+id/settingFragment"
-        android:name="com.cuncisboss.simplehabittracker.ui.SettingFragment"
+        android:name="com.cuncisboss.simplehabittracker.ui.setting.SettingFragment"
         android:label="fragment_setting"
         tools:layout="@layout/fragment_setting" />
     <fragment

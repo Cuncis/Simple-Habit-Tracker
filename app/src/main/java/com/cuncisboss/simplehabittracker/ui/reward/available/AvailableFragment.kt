@@ -69,6 +69,7 @@ class AvailableFragment : Fragment() {
             if (total > it.nominal) {
                 InsertDialogHelper().apply {
                     editTitleDialog(it.name)
+                    editBtnNameDialog("Claim")
                     setClaimedListener(false) {
                         val result = total - it.nominal
                         pref.edit().putLong(KEY_TOTAL, result).apply()

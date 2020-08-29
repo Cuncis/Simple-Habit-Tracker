@@ -29,6 +29,7 @@ object Constants {
 
     const val TAG_INSERT = "TAG_INSERT"
     const val TAG_CLAIM = "TAG_CLAIM"
+    const val TAG_RESET = "TAG_RESET"
 
     const val CURRENT_POSITION_KEY = "CURRENT_POSITION_KEY"
 }
