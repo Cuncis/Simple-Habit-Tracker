@@ -2,12 +2,14 @@ package com.cuncisboss.simplehabittracker
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_CURRENT_DATE
+import com.cuncisboss.simplehabittracker.util.Constants.TAG
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TODAY
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TOMORROW
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_YESTERDAY
@@ -30,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             when {
                 Helper.checkIsToday(pref.getString(KEY_CURRENT_DATE, "").toString()) == 1 -> {    // today
-                    Toast.makeText(this, "nothing because today", Toast.LENGTH_SHORT).show()
+                    Log.d(TAG, "onCreate: nothing because today")
                 }
                 else -> {
                     // yesterday

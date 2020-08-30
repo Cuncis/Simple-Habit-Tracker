@@ -10,6 +10,7 @@ object Constants {
     const val PREF_NAME = "com.cuncisboss.simplehabittracker.PREF"
     const val KEY_TOTAL = "KEY_TOTAL"
     const val KEY_CURRENT_DATE = "KEY_CURRENT_DATE"
+    const val KEY_USER_EXIST = "KEY_USER_EXIST"
 
     const val TASK_TYPE_YESTERDAY = 1
     const val TASK_TYPE_TODAY = 2
@@ -30,6 +31,7 @@ object Constants {
     const val TAG_INSERT = "TAG_INSERT"
     const val TAG_CLAIM = "TAG_CLAIM"
     const val TAG_RESET = "TAG_RESET"
+    const val TAG_ADD_USER = "TAG_ADD_USER"
 
     const val CURRENT_POSITION_KEY = "CURRENT_POSITION_KEY"
 }

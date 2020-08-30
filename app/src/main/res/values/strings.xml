@@ -23,6 +23,10 @@
     <string name="claim">Claim</string>
     <string name="edit">Edit</string>
     <string name="reset_all">Reset All</string>
+    <string name="iconuser">Icon User</string>
+    <string name="name">Name</string>
+    <string name="add_new_user">Add New User</string>
+    <string name="username">Username</string>
     <string-array name="type_options">
         <item>Repeat</item>
         <item>Once</item>

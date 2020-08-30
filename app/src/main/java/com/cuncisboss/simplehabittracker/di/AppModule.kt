@@ -5,6 +5,7 @@ import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import androidx.room.Room
 import com.cuncisboss.simplehabittracker.db.HabitTrackerDatabase
+import com.cuncisboss.simplehabittracker.ui.dashboard.DashboardViewModel
 import com.cuncisboss.simplehabittracker.ui.reward.RewardViewModel
 import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
 import com.cuncisboss.simplehabittracker.util.Constants.DATABASE_NAME
@@ -18,12 +19,14 @@ val localModule = module {
     single { provideDatabase(androidApplication()) }
     single { provideTaskDao(get()) }
     single { provideRewardDao(get()) }
+    single { provideUserDao(get()) }
     single { providePreference(androidApplication()) }
 }
 
 val viewModelModule = module {
     viewModel { TodoViewModel(get()) }
     viewModel { RewardViewModel(get()) }
+    viewModel { DashboardViewModel(get()) }
 }
 
 
@@ -32,8 +35,12 @@ private fun provideTaskDao(db: HabitTrackerDatabase) = db.taskDao()
 
 private fun provideRewardDao(db: HabitTrackerDatabase) = db.rewardDao()
 
+private fun provideUserDao(db: HabitTrackerDatabase) = db.userDao()
+
 private fun provideDatabase(app: Application) =
-    Room.databaseBuilder(app, HabitTrackerDatabase::class.java, DATABASE_NAME).build()
+    Room.databaseBuilder(app, HabitTrackerDatabase::class.java, DATABASE_NAME)
+        .fallbackToDestructiveMigration()
+        .build()
 
 private fun providePreference(app: Application) =
     app.getSharedPreferences(PREF_NAME, MODE_PRIVATE)

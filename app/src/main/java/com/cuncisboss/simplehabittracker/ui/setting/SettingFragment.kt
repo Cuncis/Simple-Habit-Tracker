@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import com.cuncisboss.simplehabittracker.R
+import com.cuncisboss.simplehabittracker.ui.dashboard.DashboardViewModel
 import com.cuncisboss.simplehabittracker.ui.reward.RewardViewModel
 import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
 import com.cuncisboss.simplehabittracker.util.Constants.TAG_RESET
@@ -24,6 +25,7 @@ class SettingFragment : Fragment(R.layout.fragment_setting) {
 
     private val todoViewModel by inject<TodoViewModel>()
     private val rewardViewModel by inject<RewardViewModel>()
+    private val dashboardViewModel by inject<DashboardViewModel>()
     private val pref by inject<SharedPreferences>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,6 +41,7 @@ class SettingFragment : Fragment(R.layout.fragment_setting) {
                 setClaimedListener(false) {
                     todoViewModel.removeAllTask()
                     rewardViewModel.removeAllReward()
+                    dashboardViewModel.removeUserDetail()
                     pref.edit().clear().apply()
                     (requireParentFragment().view as View).showSnackbarMessage("Reset Data Successfully")
                 }
