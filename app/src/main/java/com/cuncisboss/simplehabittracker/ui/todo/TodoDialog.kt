@@ -3,6 +3,8 @@ package com.cuncisboss.simplehabittracker.ui.todo
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
+import android.widget.AdapterView
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
@@ -12,13 +14,13 @@ import org.koin.android.ext.android.bind
 
 class TodoDialog : DialogFragment() {
 
-    private var saveListener: ((String, Long) -> Unit)? = null
+    private var saveListener: ((String, Long, Long) -> Unit)? = null
     private var title: String? = null
     private var update: String? = null
     private var name: String? = null
     private var reward: String? = null
 
-    fun setSaveListener(saveListener: (String, Long) -> Unit) {
+    fun setSaveListener(saveListener: (String, Long, Long) -> Unit) {
         this.saveListener = saveListener
     }
 
@@ -52,6 +54,22 @@ class TodoDialog : DialogFragment() {
         name?.let { binding.etTask.setText(it) }
         reward?.let { binding.etReward.setText(it) }
 
+        var type = ""
+        binding.spType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+
+            override fun onNothingSelected(parent: AdapterView<*>?) { }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                type = binding.spType.selectedItem.toString()
+            }
+
+        }
+
         binding.btnCancel.setOnClickListener {
             dialog.dismiss()
         }
@@ -67,7 +85,8 @@ class TodoDialog : DialogFragment() {
                     else -> {
                         save(
                             binding.etTask.text.toString(),
-                            binding.etReward.text.toString().toLong()
+                            binding.etReward.text.toString().toLong(),
+                            type.toLong()
                         )
                         dialog.dismiss()
                     }

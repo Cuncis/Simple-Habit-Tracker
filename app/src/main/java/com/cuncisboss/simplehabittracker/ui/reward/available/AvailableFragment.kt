@@ -18,6 +18,7 @@ import com.cuncisboss.simplehabittracker.util.Constants.KEY_AVAILABLE
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_CLAIMED
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_OPTION
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_TOTAL
+import com.cuncisboss.simplehabittracker.util.Constants.KEY_USER_EXIST
 import com.cuncisboss.simplehabittracker.util.Constants.TAG_CLAIM
 import com.cuncisboss.simplehabittracker.util.Constants.TAG_INSERT
 import com.cuncisboss.simplehabittracker.util.Helper.showSnackbarMessage
@@ -105,7 +106,7 @@ class AvailableFragment : Fragment() {
             editTitleDialog("Reward Title")
             setButtonUpdate("Update")
             setInitField(reward?.name, reward?.nominal.toString())
-            setSaveListener { title, rwd ->
+            setSaveListener { title, rwd, _ ->
                 viewModel.updateReward(
                     Reward(
                         title,
@@ -129,7 +130,7 @@ class AvailableFragment : Fragment() {
     private fun showAddRewardDialog() {
         TodoDialog().apply {
             editTitleDialog("Reward Title")
-            setSaveListener { title, reward ->
+            setSaveListener { title, reward, _ ->
                 viewModel.addReward(
                     Reward(
                         title,
@@ -154,7 +155,11 @@ class AvailableFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_add) {
-            showAddRewardDialog()
+            if (pref.getBoolean(KEY_USER_EXIST, false)) {
+                showAddRewardDialog()
+            } else {
+                Toast.makeText(requireContext(), "User not found.", Toast.LENGTH_SHORT).show()
+            }
         }
         return super.onOptionsItemSelected(item)
     }

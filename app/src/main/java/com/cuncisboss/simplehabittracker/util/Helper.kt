@@ -18,7 +18,7 @@ object Helper {
     }
 
     fun View.showSnackbarMessage(message: String) {
-        Snackbar.make(this, message, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(this, message, Snackbar.LENGTH_SHORT).show()
     }
 
     fun getCurrentDatetime(incOrDec: Int): String {

@@ -10,7 +10,7 @@ data class User(
     val jobTitle: String = "",
     val level: String = "",
     var gold: Long = 0L,
-    val exp: Long = 0L,
+    var exp: Long = 0L,
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null
 )

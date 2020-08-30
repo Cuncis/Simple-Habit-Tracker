@@ -10,7 +10,8 @@ data class Task(
     var name: String,
     var date: String,
     var type: Int,          // yesterday: 1, today: 2, tomorrow: 3
-    var value: Long,
+    var gold: Long,
+    var exp: Long,
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0
 )

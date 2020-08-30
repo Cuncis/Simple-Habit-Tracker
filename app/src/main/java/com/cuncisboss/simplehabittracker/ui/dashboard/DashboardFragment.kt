@@ -15,6 +15,8 @@ import com.cuncisboss.simplehabittracker.databinding.FragmentDashboardBinding
 import com.cuncisboss.simplehabittracker.model.User
 import com.cuncisboss.simplehabittracker.util.AddUserDialogHelper
 import com.cuncisboss.simplehabittracker.util.Constants
+import com.cuncisboss.simplehabittracker.util.Constants.KEY_EXP
+import com.cuncisboss.simplehabittracker.util.Constants.KEY_TOTAL
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_USER_EXIST
 import com.cuncisboss.simplehabittracker.util.Constants.TAG
 import com.cuncisboss.simplehabittracker.util.Constants.TAG_ADD_USER
@@ -70,18 +72,20 @@ class DashboardFragment : Fragment() {
             binding.layoutUserDetail.showView()
             binding.btnCreateUser.hideView()
 
-            it.gold = pref.getLong(Constants.KEY_TOTAL, 0L)
-            binding.user = it
-            Log.d(TAG, "setUserDetail: User DataL $it")
+            it?.let { user ->
+                user.gold = pref.getLong(KEY_TOTAL, 0L)
+                user.exp = pref.getLong(KEY_EXP, 0L)
+                binding.user = user
 
-            if (it != null) {
                 Log.d(TAG, "onViewCreated: Sudah Terdaftar")
                 binding.layoutUserDetail.visibility = View.VISIBLE
                 binding.btnCreateUser.visibility = View.GONE
-            } else {
+                pref.edit().putBoolean(KEY_USER_EXIST, true).apply()
+            } ?: run {
                 Log.d(TAG, "onViewCreated: Belum Terdaftar")
                 binding.layoutUserDetail.visibility = View.GONE
                 binding.btnCreateUser.visibility = View.VISIBLE
+                pref.edit().putBoolean(KEY_USER_EXIST, false).apply()
             }
         })
     }

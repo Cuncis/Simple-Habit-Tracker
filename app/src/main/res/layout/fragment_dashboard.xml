@@ -34,8 +34,7 @@
                 android:orientation="vertical"
                 android:paddingStart="8dp"
                 android:layout_marginTop="8dp"
-                tools:ignore="RtlSymmetry"
-                android:visibility="gone">
+                tools:ignore="RtlSymmetry">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
@@ -64,6 +63,13 @@
                     android:text="@{String.valueOf(user.gold)}"
                     tools:text="9999"
                     style="@style/TextViewGold" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{`Exp ` + String.valueOf(user.exp)}"
+                    tools:text="Exp 0"
+                    style="@style/TextViewDescription" />
 
                 <!--        <ProgressBar-->
                 <!--            android:layout_width="match_parent"-->

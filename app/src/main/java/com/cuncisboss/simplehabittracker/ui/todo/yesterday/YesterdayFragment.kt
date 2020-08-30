@@ -2,7 +2,6 @@ package com.cuncisboss.simplehabittracker.ui.todo.yesterday
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -16,8 +15,8 @@ import com.cuncisboss.simplehabittracker.databinding.FragmentYesterdayBinding
 import com.cuncisboss.simplehabittracker.model.Task
 import com.cuncisboss.simplehabittracker.ui.todo.TodoAdapter
 import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
+import com.cuncisboss.simplehabittracker.util.Constants.KEY_EXP
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_TOTAL
-import com.cuncisboss.simplehabittracker.util.Constants.TAG
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TODAY
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_YESTERDAY
 import com.cuncisboss.simplehabittracker.util.Helper
@@ -46,16 +45,11 @@ class YesterdayFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "yesterday: ${Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(-1))}")
-        Log.d(TAG, "yesterday: ${Helper.getCurrentDatetime(-1)}")
 
         val adapter = TodoAdapter()
         binding.rvYesterday.adapter = adapter
 
         yesterdayViewModel.getTasks(TASK_TYPE_YESTERDAY).observe(viewLifecycleOwner, Observer {
-            for (i in it.indices) {
-                Log.d(TAG, "onViewCreated: Date: ${it[i].date}")
-            }
             it.reverseThis()
             adapter.submitList(it)
         })
@@ -87,7 +81,7 @@ class YesterdayFragment : Fragment() {
         }
 
         view.btn_delete_task.setOnClickListener {
-            if (task != null) {
+            task?.let {
                 yesterdayViewModel.removeTask(task)
                 dialog.dismiss()
                 requireView().showSnackbarMessage("Task deleted")
@@ -95,7 +89,7 @@ class YesterdayFragment : Fragment() {
         }
 
         view.btn_skip_task.setOnClickListener {
-            if (task != null) {
+            task?.let {
                 task.type = TASK_TYPE_TODAY
                 task.date = Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(0))
                 yesterdayViewModel.updateTask(task)
@@ -105,13 +99,15 @@ class YesterdayFragment : Fragment() {
         }
 
         view.btn_done_task.setOnClickListener {
-            if (task != null) {
+            task?.let {
                 task.type = TASK_TYPE_TODAY
                 task.date = Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(0))
                 yesterdayViewModel.updateTask(task)
 
-                val total = task.value + pref.getLong(KEY_TOTAL, 0L)
-                pref.edit().putLong(KEY_TOTAL, total).apply()
+                val totalGold = task.gold + pref.getLong(KEY_TOTAL, 0L)
+                val totalExp = task.exp + pref.getLong(KEY_EXP, 0L)
+                pref.edit().putLong(KEY_TOTAL, totalGold).apply()
+                pref.edit().putLong(KEY_EXP, totalExp).apply()
 
                 dialog.dismiss()
                 requireView().showSnackbarMessage("Congrats your task is done")

@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -11,13 +12,12 @@ import androidx.lifecycle.Observer
 import com.cuncisboss.simplehabittracker.R
 import com.cuncisboss.simplehabittracker.databinding.FragmentTodayBinding
 import com.cuncisboss.simplehabittracker.model.Task
-import com.cuncisboss.simplehabittracker.model.User
-import com.cuncisboss.simplehabittracker.ui.dashboard.DashboardViewModel
 import com.cuncisboss.simplehabittracker.ui.todo.TodoAdapter
 import com.cuncisboss.simplehabittracker.ui.todo.TodoDialog
 import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
-import com.cuncisboss.simplehabittracker.util.Constants
+import com.cuncisboss.simplehabittracker.util.Constants.KEY_EXP
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_TOTAL
+import com.cuncisboss.simplehabittracker.util.Constants.KEY_USER_EXIST
 import com.cuncisboss.simplehabittracker.util.Constants.TAG
 import com.cuncisboss.simplehabittracker.util.Constants.TAG_INSERT
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TODAY
@@ -48,20 +48,19 @@ class TodayFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "today: ${Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(0))}")
-        Log.d(TAG, "today: ${Helper.getCurrentDatetime(0)}")
 
-        if (savedInstanceState != null) {
+        savedInstanceState?.let {
             val todoDialog = childFragmentManager
                 .findFragmentByTag(TAG_INSERT) as TodoDialog?
-            todoDialog?.setSaveListener { taskName, reward ->
+            todoDialog?.setSaveListener { taskName, reward, exp ->
                 todoViewModel.addTask(
                     Task(
                         0,
                         taskName,
                         Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(0)),
                         TASK_TYPE_TODAY,      // 1. repeating, 2. once, 3. certain -> 1. Yesterday 2. Today 3. Tomorrow
-                        reward
+                        reward,
+                        exp
                     )
                 )
                 (requireParentFragment().view as View).showSnackbarMessage("Task added")
@@ -104,7 +103,7 @@ class TodayFragment : Fragment() {
         }
 
         view.btn_delete_task.setOnClickListener {
-            if (task != null) {
+            task?.let {
                 todoViewModel.removeTask(task)
                 dialog.dismiss()
                 requireView().showSnackbarMessage("Task deleted")
@@ -112,7 +111,7 @@ class TodayFragment : Fragment() {
         }
 
         view.btn_skip_task.setOnClickListener {
-            if (task != null) {
+            task?.let {
                 task.type = TASK_TYPE_TOMORROW
                 task.date = Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(1))
                 todoViewModel.updateTask(task)
@@ -122,13 +121,15 @@ class TodayFragment : Fragment() {
         }
 
         view.btn_done_task.setOnClickListener {
-            if (task != null) {
+            task?.let {
                 task.type = TASK_TYPE_TOMORROW
                 task.date = Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(1))
                 todoViewModel.updateTask(task)
 
-                val total = task.value + pref.getLong(KEY_TOTAL, 0L)
+                val total = task.gold + pref.getLong(KEY_TOTAL, 0L)
+                val totalExp = task.exp + pref.getLong(KEY_EXP, 0L)
                 pref.edit().putLong(KEY_TOTAL, total).apply()
+                pref.edit().putLong(KEY_EXP, totalExp).apply()
 
                 dialog.dismiss()
                 requireView().showSnackbarMessage("Congrats your task is done")
@@ -140,14 +141,15 @@ class TodayFragment : Fragment() {
 
     private fun showInsertDialog() {
         TodoDialog().apply {
-            setSaveListener { taskName, reward ->
+            setSaveListener { taskName, reward, exp ->
                 todoViewModel.addTask(
                     Task(
                         0,
                         taskName,
                         Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(0)),
                         TASK_TYPE_TODAY,      // 1. repeating, 2. once, 3. certain -> 1. Yesterday 2. Today 3. Tomorrow
-                        reward
+                        reward,
+                        exp
                     )
                 )
                 (requireParentFragment().view as View).showSnackbarMessage("Task added")
@@ -167,7 +169,11 @@ class TodayFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_add) {
-            showInsertDialog()
+            if (pref.getBoolean(KEY_USER_EXIST, false)) {
+                showInsertDialog()
+            } else {
+                Toast.makeText(requireContext(), "User not found.", Toast.LENGTH_SHORT).show()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
