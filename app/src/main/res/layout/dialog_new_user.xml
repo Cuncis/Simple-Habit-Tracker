@@ -58,27 +58,10 @@
             android:gravity="center">
 
             <Button
-                android:id="@+id/btnCancel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/cancel"
-                android:textColor="@android:color/white" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="2"
-            android:gravity="center">
-
-            <Button
                 android:id="@+id/btnSave"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/add"
-                android:backgroundTint="@android:color/holo_green_dark"
+                android:text="@string/add_new_user"
                 android:textColor="@android:color/white" />
 
         </RelativeLayout>

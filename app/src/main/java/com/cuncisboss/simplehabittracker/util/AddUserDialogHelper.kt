@@ -32,10 +32,6 @@ class AddUserDialogHelper : DialogFragment() {
             }
         }
 
-        view.btnCancel.setOnClickListener {
-            dialog.cancel()
-        }
-
         return dialog
     }
 

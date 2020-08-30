@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -17,7 +16,6 @@ import com.cuncisboss.simplehabittracker.databinding.FragmentYesterdayBinding
 import com.cuncisboss.simplehabittracker.model.Task
 import com.cuncisboss.simplehabittracker.ui.todo.TodoAdapter
 import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
-import com.cuncisboss.simplehabittracker.util.Constants
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_TOTAL
 import com.cuncisboss.simplehabittracker.util.Constants.TAG
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TODAY
@@ -27,12 +25,11 @@ import com.cuncisboss.simplehabittracker.util.Helper.reverseThis
 import com.cuncisboss.simplehabittracker.util.Helper.showSnackbarMessage
 import com.cuncisboss.simplehabittracker.util.VisibleHelper.hideView
 import kotlinx.android.synthetic.main.dialog_alert_actions.view.*
-import kotlinx.android.synthetic.main.item_task.view.*
 import org.koin.android.ext.android.inject
 
 class YesterdayFragment : Fragment() {
 
-    private val viewModel by inject<TodoViewModel>()
+    private val yesterdayViewModel by inject<TodoViewModel>()
     private val pref by inject<SharedPreferences>()
 
     private lateinit var binding: FragmentYesterdayBinding
@@ -55,7 +52,7 @@ class YesterdayFragment : Fragment() {
         val adapter = TodoAdapter()
         binding.rvYesterday.adapter = adapter
 
-        viewModel.getTasks(TASK_TYPE_YESTERDAY).observe(viewLifecycleOwner, Observer {
+        yesterdayViewModel.getTasks(TASK_TYPE_YESTERDAY).observe(viewLifecycleOwner, Observer {
             for (i in it.indices) {
                 Log.d(TAG, "onViewCreated: Date: ${it[i].date}")
             }
@@ -91,7 +88,7 @@ class YesterdayFragment : Fragment() {
 
         view.btn_delete_task.setOnClickListener {
             if (task != null) {
-                viewModel.removeTask(task)
+                yesterdayViewModel.removeTask(task)
                 dialog.dismiss()
                 requireView().showSnackbarMessage("Task deleted")
             }
@@ -101,7 +98,7 @@ class YesterdayFragment : Fragment() {
             if (task != null) {
                 task.type = TASK_TYPE_TODAY
                 task.date = Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(0))
-                viewModel.updateTask(task)
+                yesterdayViewModel.updateTask(task)
                 dialog.dismiss()
                 requireView().showSnackbarMessage("Task skipped")
             }
@@ -111,14 +108,11 @@ class YesterdayFragment : Fragment() {
             if (task != null) {
                 task.type = TASK_TYPE_TODAY
                 task.date = Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(0))
-                viewModel.updateTask(task)
-                if (pref.getLong(KEY_TOTAL, 0L) == 0L) {
-                    pref.edit().putLong(KEY_TOTAL, task.value).apply()
-                } else {
-                    val total = task.value + pref.getLong(KEY_TOTAL, 0L)
-                    pref.edit().putLong(KEY_TOTAL, total).apply()
-                }
-                Log.d(TAG, "dialogAlert: ${pref.getLong(KEY_TOTAL, 0L)}")
+                yesterdayViewModel.updateTask(task)
+
+                val total = task.value + pref.getLong(KEY_TOTAL, 0L)
+                pref.edit().putLong(KEY_TOTAL, total).apply()
+
                 dialog.dismiss()
                 requireView().showSnackbarMessage("Congrats your task is done")
             }

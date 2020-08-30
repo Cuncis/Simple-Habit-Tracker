@@ -11,10 +11,13 @@ import androidx.lifecycle.Observer
 import com.cuncisboss.simplehabittracker.R
 import com.cuncisboss.simplehabittracker.databinding.FragmentTodayBinding
 import com.cuncisboss.simplehabittracker.model.Task
+import com.cuncisboss.simplehabittracker.model.User
+import com.cuncisboss.simplehabittracker.ui.dashboard.DashboardViewModel
 import com.cuncisboss.simplehabittracker.ui.todo.TodoAdapter
 import com.cuncisboss.simplehabittracker.ui.todo.TodoDialog
 import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
 import com.cuncisboss.simplehabittracker.util.Constants
+import com.cuncisboss.simplehabittracker.util.Constants.KEY_TOTAL
 import com.cuncisboss.simplehabittracker.util.Constants.TAG
 import com.cuncisboss.simplehabittracker.util.Constants.TAG_INSERT
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TODAY
@@ -29,7 +32,7 @@ import org.koin.android.ext.android.inject
 
 class TodayFragment : Fragment() {
 
-    private val viewModel by inject<TodoViewModel>()
+    private val todoViewModel by inject<TodoViewModel>()
     private val pref by inject<SharedPreferences>()
 
     private lateinit var binding: FragmentTodayBinding
@@ -52,7 +55,7 @@ class TodayFragment : Fragment() {
             val todoDialog = childFragmentManager
                 .findFragmentByTag(TAG_INSERT) as TodoDialog?
             todoDialog?.setSaveListener { taskName, reward ->
-                viewModel.addTask(
+                todoViewModel.addTask(
                     Task(
                         0,
                         taskName,
@@ -68,7 +71,7 @@ class TodayFragment : Fragment() {
         val adapter = TodoAdapter()
         binding.rvToday.adapter = adapter
 
-        viewModel.getTasks(TASK_TYPE_TODAY).observe(viewLifecycleOwner, Observer {
+        todoViewModel.getTasks(TASK_TYPE_TODAY).observe(viewLifecycleOwner, Observer {
             Log.d(TAG, "onViewCreated: $it")
             it.reverseThis()
             adapter.submitList(it)
@@ -102,7 +105,7 @@ class TodayFragment : Fragment() {
 
         view.btn_delete_task.setOnClickListener {
             if (task != null) {
-                viewModel.removeTask(task)
+                todoViewModel.removeTask(task)
                 dialog.dismiss()
                 requireView().showSnackbarMessage("Task deleted")
             }
@@ -112,7 +115,7 @@ class TodayFragment : Fragment() {
             if (task != null) {
                 task.type = TASK_TYPE_TOMORROW
                 task.date = Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(1))
-                viewModel.updateTask(task)
+                todoViewModel.updateTask(task)
                 dialog.dismiss()
                 requireView().showSnackbarMessage("Task skipped")
             }
@@ -122,14 +125,11 @@ class TodayFragment : Fragment() {
             if (task != null) {
                 task.type = TASK_TYPE_TOMORROW
                 task.date = Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(1))
-                viewModel.updateTask(task)
-                if (pref.getLong(Constants.KEY_TOTAL, 0L) == 0L) {
-                    pref.edit().putLong(Constants.KEY_TOTAL, task.value).apply()
-                } else {
-                    val total = task.value + pref.getLong(Constants.KEY_TOTAL, 0L)
-                    pref.edit().putLong(Constants.KEY_TOTAL, total).apply()
-                }
-                Log.d(TAG, "dialogAlert: ${pref.getLong(Constants.KEY_TOTAL, 0L)}")
+                todoViewModel.updateTask(task)
+
+                val total = task.value + pref.getLong(KEY_TOTAL, 0L)
+                pref.edit().putLong(KEY_TOTAL, total).apply()
+
                 dialog.dismiss()
                 requireView().showSnackbarMessage("Congrats your task is done")
             }
@@ -141,7 +141,7 @@ class TodayFragment : Fragment() {
     private fun showInsertDialog() {
         TodoDialog().apply {
             setSaveListener { taskName, reward ->
-                viewModel.addTask(
+                todoViewModel.addTask(
                     Task(
                         0,
                         taskName,
@@ -168,7 +168,6 @@ class TodayFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_add) {
             showInsertDialog()
-//            viewModel.removeAllTask()
         }
         return super.onOptionsItemSelected(item)
     }

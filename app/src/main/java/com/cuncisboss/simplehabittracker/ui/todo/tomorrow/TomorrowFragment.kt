@@ -26,7 +26,7 @@ import org.koin.android.ext.android.inject
 
 class TomorrowFragment : Fragment() {
 
-    private val viewModel by inject<TodoViewModel>()
+    private val tomorrowViewModel by inject<TodoViewModel>()
 
     private lateinit var binding: FragmentTomorrowBinding
 
@@ -49,7 +49,7 @@ class TomorrowFragment : Fragment() {
             val todoDialog = childFragmentManager
                 .findFragmentByTag(Constants.TAG_INSERT) as TodoDialog?
             todoDialog?.setSaveListener { taskName, reward ->
-                viewModel.addTask(
+                tomorrowViewModel.addTask(
                     Task(
                         0,
                         taskName,
@@ -65,7 +65,7 @@ class TomorrowFragment : Fragment() {
         val adapter = TodoAdapter()
         binding.rvTomorrow.adapter = adapter
 
-        viewModel.getTasks(TASK_TYPE_TOMORROW).observe(viewLifecycleOwner, Observer {
+        tomorrowViewModel.getTasks(TASK_TYPE_TOMORROW).observe(viewLifecycleOwner, Observer {
             it.reverseThis()
             adapter.submitList(it)
         })
@@ -82,7 +82,7 @@ class TomorrowFragment : Fragment() {
     private fun showInsertDialog() {
         TodoDialog().apply {
             setSaveListener { taskName, reward ->
-                viewModel.addTask(
+                tomorrowViewModel.addTask(
                     Task(
                         0,
                         taskName,
@@ -117,7 +117,7 @@ class TomorrowFragment : Fragment() {
 
         view.btn_delete_task.setOnClickListener {
             task?.let {
-                viewModel.removeTask(task)
+                tomorrowViewModel.removeTask(task)
                 dialog.dismiss()
                 requireView().showSnackbarMessage("Task deleted")
             }
