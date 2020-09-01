@@ -2,14 +2,16 @@ package com.cuncisboss.simplehabittracker.util
 
 import android.content.res.ColorStateList
 import android.view.View
-import android.widget.Button
 import androidx.core.content.ContextCompat
 import com.cuncisboss.simplehabittracker.R
 import com.cuncisboss.simplehabittracker.model.Task
+import com.cuncisboss.simplehabittracker.util.Constants.BASE_EXP
+import com.cuncisboss.simplehabittracker.util.Constants.EXPONENT
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
+import kotlin.math.floor
+import kotlin.math.pow
 
 object Helper {
 
@@ -75,6 +77,43 @@ object Helper {
             )
         )
         this.isEnabled = false
+    }
+
+    fun calXpForLevel(level: Int): Double {
+        return BASE_EXP + (BASE_EXP * level.toDouble().pow(EXPONENT))
+    }
+
+    fun calculateFullTargetExp(level: Int): Long {
+        var requiredExp = 0.0
+        for (i in 0..level) {
+            requiredExp += calXpForLevel(i)
+        }
+        return requiredExp.toLong()
+    }
+
+    fun calculateFullTargetExpAfter(level: Int): Long {
+        var requiredExp = 0.0
+        for (i in 0..level+1) {
+            requiredExp += calXpForLevel(i)
+        }
+        return requiredExp.toLong()
+    }
+
+    fun calculateLevel(exp: Double): Int {
+        var level = 0
+        var maxExp = calXpForLevel(0)
+        do {
+            maxExp += calXpForLevel(++level)
+        } while (maxExp < exp)
+        return level
+    }
+
+    fun experience(level: Int): Double {
+        var a = 0.0
+        for (i in 0..level) {
+            a += floor(i + 300 * 2.0.pow((i / 7).toDouble()))
+        }
+        return floor(a/4)
     }
 
 }

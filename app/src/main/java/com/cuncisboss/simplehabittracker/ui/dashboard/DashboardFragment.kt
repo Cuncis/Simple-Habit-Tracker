@@ -14,12 +14,14 @@ import com.cuncisboss.simplehabittracker.R
 import com.cuncisboss.simplehabittracker.databinding.FragmentDashboardBinding
 import com.cuncisboss.simplehabittracker.model.User
 import com.cuncisboss.simplehabittracker.util.AddUserDialogHelper
-import com.cuncisboss.simplehabittracker.util.Constants
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_EXP
+import com.cuncisboss.simplehabittracker.util.Constants.KEY_EXP_TOTAL
+import com.cuncisboss.simplehabittracker.util.Constants.KEY_LEVEL
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_TOTAL
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_USER_EXIST
 import com.cuncisboss.simplehabittracker.util.Constants.TAG
 import com.cuncisboss.simplehabittracker.util.Constants.TAG_ADD_USER
+import com.cuncisboss.simplehabittracker.util.Helper
 import com.cuncisboss.simplehabittracker.util.Helper.showSnackbarMessage
 import com.cuncisboss.simplehabittracker.util.VisibleHelper.hideView
 import com.cuncisboss.simplehabittracker.util.VisibleHelper.showView
@@ -48,6 +50,7 @@ class DashboardFragment : Fragment() {
             showAddUserDialog()
         }
         setUserDetail()
+
     }
 
     private fun showAddUserDialog() {
@@ -80,6 +83,7 @@ class DashboardFragment : Fragment() {
                 Log.d(TAG, "onViewCreated: Sudah Terdaftar")
                 binding.layoutUserDetail.visibility = View.VISIBLE
                 binding.btnCreateUser.visibility = View.GONE
+                initExp(pref.getLong(KEY_EXP, 0L).toDouble())
                 pref.edit().putBoolean(KEY_USER_EXIST, true).apply()
             } ?: run {
                 Log.d(TAG, "onViewCreated: Belum Terdaftar")
@@ -88,5 +92,33 @@ class DashboardFragment : Fragment() {
                 pref.edit().putBoolean(KEY_USER_EXIST, false).apply()
             }
         })
+    }
+
+    private fun initExp(exp: Double) {
+        binding.level = "Level ${pref.getInt(KEY_LEVEL, 1)}"
+
+        var total = 0L
+        for (i in 1 until pref.getInt(KEY_LEVEL, 1)) {
+            Log.d(TAG, "initExp: Level $i, Exp: ${Helper.calXpForLevel(i).toLong()}")
+            total += Helper.calXpForLevel(i).toLong()
+        }
+        // exp -
+        val totalExp = exp.toLong() - total
+        if (totalExp >= Helper.calXpForLevel(Helper.calculateLevel(exp)).toLong()) {
+            pref.edit().putInt(KEY_LEVEL, (pref.getInt(KEY_LEVEL, 1)+1)).apply()
+        }
+
+        Log.d(TAG, "initExp: Total Loop: $total")
+        Log.d(TAG, "initExp: Exp: ${exp.toLong()}")
+        Log.d(TAG, "initExp: TotalExp: $totalExp")
+        Log.d(TAG, "initExp: HelperToLong: ${Helper.calXpForLevel(Helper.calculateLevel(exp)).toLong()}")
+
+        binding.progressExp.apply {
+            val totalLevel = pref.getInt(KEY_LEVEL, 1)
+            labelText = "Exp ${totalExp}/${Helper.calXpForLevel(totalLevel).toLong()}"
+            max = Helper.calXpForLevel(totalLevel).toFloat()
+            min = 0f
+            progress = totalExp.toFloat()
+        }
     }
 }

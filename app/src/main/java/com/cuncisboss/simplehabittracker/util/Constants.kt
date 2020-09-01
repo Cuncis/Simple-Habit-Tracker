@@ -20,6 +20,8 @@ object Constants {
     const val KEY_AVAILABLE = "Available"
     const val KEY_CLAIMED = "Claimed"
     const val KEY_OPTION = "Option"
+    const val KEY_LEVEL = "KEY_LEVEL"
+    const val KEY_EXP_TOTAL = "KEY_EXP_TOTAL"
 
     const val NOTIFICATION_CHANNEL_ID = "task_channel"
     const val NOTIFICATION_CHANNEL_NAME = "Task"
@@ -35,4 +37,7 @@ object Constants {
     const val TAG_ADD_USER = "TAG_ADD_USER"
 
     const val CURRENT_POSITION_KEY = "CURRENT_POSITION_KEY"
+
+    const val BASE_EXP: Double = 100.0
+    const val EXPONENT: Double = 1.04
 }
