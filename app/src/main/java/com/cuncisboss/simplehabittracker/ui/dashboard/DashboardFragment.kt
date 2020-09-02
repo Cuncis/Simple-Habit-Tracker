@@ -14,10 +14,8 @@ import com.cuncisboss.simplehabittracker.R
 import com.cuncisboss.simplehabittracker.databinding.FragmentDashboardBinding
 import com.cuncisboss.simplehabittracker.model.User
 import com.cuncisboss.simplehabittracker.util.AddUserDialogHelper
-import com.cuncisboss.simplehabittracker.util.Constants.KEY_EXP
-import com.cuncisboss.simplehabittracker.util.Constants.KEY_EXP_TOTAL
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_LEVEL
-import com.cuncisboss.simplehabittracker.util.Constants.KEY_TOTAL
+import com.cuncisboss.simplehabittracker.util.Constants.KEY_USERNAME
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_USER_EXIST
 import com.cuncisboss.simplehabittracker.util.Constants.TAG
 import com.cuncisboss.simplehabittracker.util.Constants.TAG_ADD_USER
@@ -56,6 +54,7 @@ class DashboardFragment : Fragment() {
     private fun showAddUserDialog() {
         AddUserDialogHelper().apply {
             setSaveListener { username ->
+                pref.edit().putString(KEY_USERNAME, username).apply()
                 viewModel.insertUser(
                     User(
                         username.toString(),
@@ -76,14 +75,13 @@ class DashboardFragment : Fragment() {
             binding.btnCreateUser.hideView()
 
             it?.let { user ->
-                user.gold = pref.getLong(KEY_TOTAL, 0L)
-                user.exp = pref.getLong(KEY_EXP, 0L)
+                Log.d(TAG, "setUserDetail: $user")
                 binding.user = user
 
                 Log.d(TAG, "onViewCreated: Sudah Terdaftar")
                 binding.layoutUserDetail.visibility = View.VISIBLE
                 binding.btnCreateUser.visibility = View.GONE
-                initExp(pref.getLong(KEY_EXP, 0L).toDouble())
+                initExp(user.exp.toDouble())
                 pref.edit().putBoolean(KEY_USER_EXIST, true).apply()
             } ?: run {
                 Log.d(TAG, "onViewCreated: Belum Terdaftar")
@@ -92,33 +90,33 @@ class DashboardFragment : Fragment() {
                 pref.edit().putBoolean(KEY_USER_EXIST, false).apply()
             }
         })
+
+        viewModel.level.observe(viewLifecycleOwner) {
+            binding.level = "Level $it"
+            viewModel.totalLevel.postValue(it)
+            Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun initExp(exp: Double) {
-        binding.level = "Level ${pref.getInt(KEY_LEVEL, 1)}"
-
-        var total = 0L
-        for (i in 1 until pref.getInt(KEY_LEVEL, 1)) {
-            Log.d(TAG, "initExp: Level $i, Exp: ${Helper.calXpForLevel(i).toLong()}")
-            total += Helper.calXpForLevel(i).toLong()
-        }
-        // exp -
-        val totalExp = exp.toLong() - total
+        val totalExp = exp.toLong() - Helper.getTotalExp(pref.getInt(KEY_LEVEL, 1))
         if (totalExp >= Helper.calXpForLevel(Helper.calculateLevel(exp)).toLong()) {
-            pref.edit().putInt(KEY_LEVEL, (pref.getInt(KEY_LEVEL, 1)+1)).apply()
+            val nextLevel = pref.getInt(KEY_LEVEL, 1) + 1
+            viewModel.setLevel(nextLevel)
+            pref.edit().putInt(KEY_LEVEL, nextLevel).apply()
+        } else {
+            val currentLevel = pref.getInt(KEY_LEVEL, 1)
+            viewModel.setLevel(currentLevel)
         }
 
-        Log.d(TAG, "initExp: Total Loop: $total")
-        Log.d(TAG, "initExp: Exp: ${exp.toLong()}")
-        Log.d(TAG, "initExp: TotalExp: $totalExp")
-        Log.d(TAG, "initExp: HelperToLong: ${Helper.calXpForLevel(Helper.calculateLevel(exp)).toLong()}")
-
-        binding.progressExp.apply {
-            val totalLevel = pref.getInt(KEY_LEVEL, 1)
-            labelText = "Exp ${totalExp}/${Helper.calXpForLevel(totalLevel).toLong()}"
-            max = Helper.calXpForLevel(totalLevel).toFloat()
-            min = 0f
-            progress = totalExp.toFloat()
+        viewModel.totalLevel.observe(viewLifecycleOwner) { totalLevel ->
+            val totalExp2 = exp.toLong() - Helper.getTotalExp(totalLevel)
+            binding.progressExp.apply {
+                labelText = "Exp ${totalExp2}/${Helper.calXpForLevel(totalLevel).toLong()}"
+                max = Helper.calXpForLevel(totalLevel).toFloat()
+                min = 0f
+                progress = totalExp2.toFloat()
+            }
         }
     }
 }

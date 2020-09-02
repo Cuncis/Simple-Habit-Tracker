@@ -12,11 +12,14 @@ import androidx.lifecycle.Observer
 import com.cuncisboss.simplehabittracker.R
 import com.cuncisboss.simplehabittracker.databinding.FragmentTodayBinding
 import com.cuncisboss.simplehabittracker.model.Task
+import com.cuncisboss.simplehabittracker.model.User
+import com.cuncisboss.simplehabittracker.ui.dashboard.DashboardViewModel
 import com.cuncisboss.simplehabittracker.ui.todo.TodoAdapter
 import com.cuncisboss.simplehabittracker.ui.todo.TodoDialog
 import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_EXP
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_TOTAL
+import com.cuncisboss.simplehabittracker.util.Constants.KEY_USERNAME
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_USER_EXIST
 import com.cuncisboss.simplehabittracker.util.Constants.TAG
 import com.cuncisboss.simplehabittracker.util.Constants.TAG_INSERT
@@ -33,6 +36,7 @@ import org.koin.android.ext.android.inject
 class TodayFragment : Fragment() {
 
     private val todoViewModel by inject<TodoViewModel>()
+    private val dashboardViewModel by inject<DashboardViewModel>()
     private val pref by inject<SharedPreferences>()
 
     private lateinit var binding: FragmentTodayBinding
@@ -130,6 +134,8 @@ class TodayFragment : Fragment() {
                 val totalExp = task.exp + pref.getLong(KEY_EXP, 0L)
                 pref.edit().putLong(KEY_TOTAL, total).apply()
                 pref.edit().putLong(KEY_EXP, totalExp).apply()
+
+                dashboardViewModel.updateUserByUsername(total, totalExp, pref.getString(KEY_USERNAME, "").toString())
 
                 dialog.dismiss()
                 requireView().showSnackbarMessage("Congrats your task is done")

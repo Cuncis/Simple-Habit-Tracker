@@ -1,12 +1,16 @@
 package com.cuncisboss.simplehabittracker.util
 
 import android.content.res.ColorStateList
+import android.util.Log
+import android.view.Gravity
 import android.view.View
+import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import com.cuncisboss.simplehabittracker.R
 import com.cuncisboss.simplehabittracker.model.Task
 import com.cuncisboss.simplehabittracker.util.Constants.BASE_EXP
 import com.cuncisboss.simplehabittracker.util.Constants.EXPONENT
+import com.cuncisboss.simplehabittracker.util.Helper.showSnackbarMessage
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.util.*
@@ -19,8 +23,17 @@ object Helper {
         (this as ArrayList).reverse()
     }
 
+//    fun View.showSnackbarMessage(message: String) {
+//        Snackbar.make(this, message, Snackbar.LENGTH_SHORT).show()
+//    }
+
     fun View.showSnackbarMessage(message: String) {
-        Snackbar.make(this, message, Snackbar.LENGTH_SHORT).show()
+        val snackbar = Snackbar.make(this, message, Snackbar.LENGTH_SHORT)
+        val view  = snackbar.view
+        val params = view.layoutParams as FrameLayout.LayoutParams
+        params.gravity = Gravity.TOP
+        view.layoutParams = params
+        snackbar.show()
     }
 
     fun getCurrentDatetime(incOrDec: Int): String {
@@ -114,6 +127,15 @@ object Helper {
             a += floor(i + 300 * 2.0.pow((i / 7).toDouble()))
         }
         return floor(a/4)
+    }
+
+    fun getTotalExp(level: Int): Long {
+        var total = 0L
+        for (i in 1 until level) {
+            Log.d(Constants.TAG, "initExp: Level $i, Exp: ${Helper.calXpForLevel(i).toLong()}")
+            total += Helper.calXpForLevel(i).toLong()
+        }
+        return total
     }
 
 }

@@ -12,6 +12,7 @@ object Constants {
     const val KEY_EXP = "KEY_EXP"
     const val KEY_CURRENT_DATE = "KEY_CURRENT_DATE"
     const val KEY_USER_EXIST = "KEY_USER_EXIST"
+    const val KEY_USERNAME = "KEY_USERNAME"
 
     const val TASK_TYPE_YESTERDAY = 1
     const val TASK_TYPE_TODAY = 2
