@@ -48,7 +48,6 @@ class DashboardFragment : Fragment() {
             showAddUserDialog()
         }
         setUserDetail()
-
     }
 
     private fun showAddUserDialog() {
@@ -75,7 +74,6 @@ class DashboardFragment : Fragment() {
             binding.btnCreateUser.hideView()
 
             it?.let { user ->
-                Log.d(TAG, "setUserDetail: $user")
                 binding.user = user
 
                 Log.d(TAG, "onViewCreated: Sudah Terdaftar")
@@ -99,13 +97,14 @@ class DashboardFragment : Fragment() {
     }
 
     private fun initExp(exp: Double) {
-        val totalExp = exp.toLong() - Helper.getTotalExp(pref.getInt(KEY_LEVEL, 1))
+        val currentLevel = pref.getInt(KEY_LEVEL, 1)
+        val totalExp = exp.toLong() - Helper.getTotalExp(currentLevel)
+
         if (totalExp >= Helper.calXpForLevel(Helper.calculateLevel(exp)).toLong()) {
             val nextLevel = pref.getInt(KEY_LEVEL, 1) + 1
             viewModel.setLevel(nextLevel)
             pref.edit().putInt(KEY_LEVEL, nextLevel).apply()
         } else {
-            val currentLevel = pref.getInt(KEY_LEVEL, 1)
             viewModel.setLevel(currentLevel)
         }
 
