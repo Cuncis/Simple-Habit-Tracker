@@ -1,8 +1,8 @@
 package com.cuncisboss.simplehabittracker.ui.dashboard
 
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,12 +17,13 @@ import com.cuncisboss.simplehabittracker.util.AddUserDialogHelper
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_LEVEL
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_USERNAME
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_USER_EXIST
-import com.cuncisboss.simplehabittracker.util.Constants.TAG
 import com.cuncisboss.simplehabittracker.util.Constants.TAG_ADD_USER
 import com.cuncisboss.simplehabittracker.util.Helper
 import com.cuncisboss.simplehabittracker.util.Helper.showSnackbarMessage
 import com.cuncisboss.simplehabittracker.util.VisibleHelper.hideView
 import com.cuncisboss.simplehabittracker.util.VisibleHelper.showView
+import kotlinx.android.synthetic.main.fragment_dashboard.*
+import lecho.lib.hellocharts.model.*
 import org.koin.android.ext.android.inject
 
 
@@ -48,6 +49,61 @@ class DashboardFragment : Fragment() {
             showAddUserDialog()
         }
         setUserDetail()
+        initChart()
+    }
+
+    private fun initChart() {
+        val axisData = listOf<String>(
+            "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept",
+            "Oct", "Nov", "Dec"
+        )
+        val yAxisData = listOf<Int>(50, 20, 15, 30, 20, 60, 15, 40, 45, 10, 90, 18)
+
+        val yAxisValues: ArrayList<PointValue> = ArrayList()
+        val axisValues: ArrayList<AxisValue> = ArrayList()
+
+
+        val line: Line = Line(yAxisValues).setColor(Color.parseColor("#9C27B0"))
+
+        for (i in axisData.indices) {
+            axisValues.add(i, AxisValue(i.toFloat()).setLabel(axisData[i]))
+        }
+
+        for (i in yAxisData.indices) {
+            yAxisValues.add(PointValue(i.toFloat(), yAxisData[i].toFloat()))
+        }
+
+        val lines: MutableList<Line> = ArrayList()
+        lines.add(line)
+
+        val data = LineChartData()
+        data.lines = lines
+
+        val axis = Axis()
+        axis.apply {
+            values = axisValues
+            textSize = 16
+            textColor = Color.parseColor("#000000")
+        }.also {
+            data.axisXBottom = it
+        }
+
+        val yAxis = Axis()
+        yAxis.apply {
+            name = "Sales in millions"
+            textColor = Color.parseColor("#000000")
+            textSize = 16
+        }.also {
+            data.axisYLeft = it
+        }
+
+        lineChartView.apply {
+            lineChartData = data
+            val viewport = Viewport(this.maximumViewport)
+            viewport.top = 110f
+            maximumViewport = viewport
+            currentViewport = viewport
+        }
     }
 
     private fun showAddUserDialog() {
@@ -58,7 +114,7 @@ class DashboardFragment : Fragment() {
                     User(
                         username.toString(),
                         "Beginner",      // Beginner, Intermediate, Advanced, Expert
-                    "Level 1",
+                        "Level 1",
                         0L,
                         0L
                     )
@@ -74,15 +130,13 @@ class DashboardFragment : Fragment() {
             binding.btnCreateUser.hideView()
 
             it?.let { user ->
-                binding.user = user
+                binding.user = user     // Sudah Terdaftar
 
-                Log.d(TAG, "onViewCreated: Sudah Terdaftar")
                 binding.layoutUserDetail.visibility = View.VISIBLE
                 binding.btnCreateUser.visibility = View.GONE
                 initExp(user.exp.toDouble())
                 pref.edit().putBoolean(KEY_USER_EXIST, true).apply()
-            } ?: run {
-                Log.d(TAG, "onViewCreated: Belum Terdaftar")
+            } ?: run {                  // Belum Terdaftar
                 binding.layoutUserDetail.visibility = View.GONE
                 binding.btnCreateUser.visibility = View.VISIBLE
                 pref.edit().putBoolean(KEY_USER_EXIST, false).apply()
