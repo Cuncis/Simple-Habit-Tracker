@@ -20,13 +20,14 @@ val localModule = module {
     single { provideTaskDao(get()) }
     single { provideRewardDao(get()) }
     single { provideUserDao(get()) }
+    single { provideGraphDao(get()) }
     single { providePreference(androidApplication()) }
 }
 
 val viewModelModule = module {
     viewModel { TodoViewModel(get()) }
     viewModel { RewardViewModel(get()) }
-    viewModel { DashboardViewModel(get()) }
+    viewModel { DashboardViewModel(get(), get()) }
 }
 
 
@@ -36,6 +37,8 @@ private fun provideTaskDao(db: HabitTrackerDatabase) = db.taskDao()
 private fun provideRewardDao(db: HabitTrackerDatabase) = db.rewardDao()
 
 private fun provideUserDao(db: HabitTrackerDatabase) = db.userDao()
+
+private fun provideGraphDao(db: HabitTrackerDatabase) = db.graphDao()
 
 private fun provideDatabase(app: Application) =
     Room.databaseBuilder(app, HabitTrackerDatabase::class.java, DATABASE_NAME)

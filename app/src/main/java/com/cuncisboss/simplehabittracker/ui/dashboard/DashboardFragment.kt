@@ -3,6 +3,7 @@ package com.cuncisboss.simplehabittracker.ui.dashboard
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,7 @@ import com.cuncisboss.simplehabittracker.util.Helper
 import com.cuncisboss.simplehabittracker.util.Helper.showSnackbarMessage
 import com.cuncisboss.simplehabittracker.util.VisibleHelper.hideView
 import com.cuncisboss.simplehabittracker.util.VisibleHelper.showView
+import com.cuncisboss.simplehabittracker.util.getCurrentWeek
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import lecho.lib.hellocharts.model.*
 import org.koin.android.ext.android.inject
@@ -50,14 +52,16 @@ class DashboardFragment : Fragment() {
         }
         setUserDetail()
         initChart()
+
+        Log.d("_logHabit", "onViewCreated: ${getCurrentWeek()}")
     }
 
     private fun initChart() {
-        val axisData = listOf<String>(
-            "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept",
-            "Oct", "Nov", "Dec"
-        )
-        val yAxisData = listOf<Int>(50, 20, 15, 30, 20, 60, 15, 40, 45, 10, 90, 18)
+//        val axisData = listOf(
+//            "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"
+//        )
+        val axisData = getCurrentWeek()
+        val yAxisData = listOf(15, 20, 12, 12, 15, 19, 20, 21, 21, 24)
 
         val yAxisValues: ArrayList<PointValue> = ArrayList()
         val axisValues: ArrayList<AxisValue> = ArrayList()
@@ -90,17 +94,19 @@ class DashboardFragment : Fragment() {
 
         val yAxis = Axis()
         yAxis.apply {
-            name = "Sales in millions"
+            name = "Tasks"
             textColor = Color.parseColor("#000000")
             textSize = 16
+
         }.also {
             data.axisYLeft = it
         }
 
-        lineChartView.apply {
+        binding.lineChartView.apply {
             lineChartData = data
             val viewport = Viewport(this.maximumViewport)
-            viewport.top = 110f
+            viewport.top = 30f
+            viewport.bottom = 0f
             maximumViewport = viewport
             currentViewport = viewport
         }

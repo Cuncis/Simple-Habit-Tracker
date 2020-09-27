@@ -10,6 +10,7 @@ object Constants {
     const val PREF_NAME = "com.cuncisboss.simplehabittracker.PREF"
     const val KEY_TOTAL = "KEY_TOTAL"
     const val KEY_EXP = "KEY_EXP"
+    const val KEY_QTY = "KEY_QTY"
     const val KEY_CURRENT_DATE = "KEY_CURRENT_DATE"
     const val KEY_USER_EXIST = "KEY_USER_EXIST"
     const val KEY_USERNAME = "KEY_USERNAME"

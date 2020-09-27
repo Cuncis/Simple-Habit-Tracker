@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_CURRENT_DATE
+import com.cuncisboss.simplehabittracker.util.Constants.KEY_QTY
 import com.cuncisboss.simplehabittracker.util.Constants.TAG
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TODAY
 import com.cuncisboss.simplehabittracker.util.Constants.TASK_TYPE_TOMORROW
@@ -35,6 +36,7 @@ class MainActivity : AppCompatActivity() {
                     Log.d(TAG, "onCreate: nothing because today")
                 }
                 else -> {
+                    pref.edit().putInt(KEY_QTY, 0).apply()
                     // yesterday
                     viewModel.removeTaskByType(TASK_TYPE_YESTERDAY)
 

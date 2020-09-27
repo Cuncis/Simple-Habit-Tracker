@@ -11,6 +11,7 @@ data class User(
     val level: String = "",
     var gold: Long = 0L,
     var exp: Long = 0L,
+    var qty: Int = 0,
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null
 )

@@ -18,6 +18,7 @@ import com.cuncisboss.simplehabittracker.ui.todo.TodoAdapter
 import com.cuncisboss.simplehabittracker.ui.todo.TodoDialog
 import com.cuncisboss.simplehabittracker.ui.todo.TodoViewModel
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_EXP
+import com.cuncisboss.simplehabittracker.util.Constants.KEY_QTY
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_TOTAL
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_USERNAME
 import com.cuncisboss.simplehabittracker.util.Constants.KEY_USER_EXIST
@@ -74,7 +75,7 @@ class TodayFragment : Fragment() {
         val adapter = TodoAdapter()
         binding.rvToday.adapter = adapter
 
-        todoViewModel.getTasks(TASK_TYPE_TODAY).observe(viewLifecycleOwner, Observer {
+        todoViewModel.getTasks(TASK_TYPE_TODAY).observe(viewLifecycleOwner, {
             Log.d(TAG, "onViewCreated: $it")
             it.reverseThis()
             adapter.submitList(it)
@@ -114,28 +115,32 @@ class TodayFragment : Fragment() {
             }
         }
 
-        view.btn_skip_task.setOnClickListener {
+        view.btn_skip_task.setOnClickListener { _ ->
             task?.let {
-                task.type = TASK_TYPE_TOMORROW
-                task.date = Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(1))
-                todoViewModel.updateTask(task)
+                it.type = TASK_TYPE_TOMORROW
+                it.date = Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(1))
+                todoViewModel.updateTask(it)
                 dialog.dismiss()
                 requireView().showSnackbarMessage("Task skipped")
             }
         }
 
-        view.btn_done_task.setOnClickListener {
+        view.btn_done_task.setOnClickListener { v ->
             task?.let {
-                task.type = TASK_TYPE_TOMORROW
-                task.date = Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(1))
-                todoViewModel.updateTask(task)
+                it.type = TASK_TYPE_TOMORROW
+                it.date = Helper.formatToYesterdayOrTodayOrTomorrow(Helper.getCurrentDatetime(1))
+                todoViewModel.updateTask(it)
 
-                val total = task.gold + pref.getLong(KEY_TOTAL, 0L)
-                val totalExp = task.exp + pref.getLong(KEY_EXP, 0L)
+                val total = it.gold + pref.getLong(KEY_TOTAL, 0L)
+                val totalExp = it.exp + pref.getLong(KEY_EXP, 0L)
+                val taskQty = 1 + pref.getInt(KEY_QTY, 0)
+
                 pref.edit().putLong(KEY_TOTAL, total).apply()
                 pref.edit().putLong(KEY_EXP, totalExp).apply()
+                pref.edit().putInt(KEY_QTY, taskQty).apply()
 
-                dashboardViewModel.updateUserByUsername(total, totalExp, pref.getString(KEY_USERNAME, "").toString())
+                dashboardViewModel.updateUserByUsername(
+                    total, totalExp, pref.getString(KEY_USERNAME, "").toString(), taskQty)
 
                 dialog.dismiss()
                 requireView().showSnackbarMessage("Congrats your task is done")
